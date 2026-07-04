@@ -109,13 +109,19 @@ p { color: var(--text-dim); margin: 0 0 16px; }
   line-height: 1;
 }
 
-/* Logo image styles */
-.brand-logo img {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
+/* Small square brand icon (like the small 'n' badge) */
+.brand-icon {
+  width: 20px;
+  height: 20px;
   display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Add an icon image at assets/images/logo-icon.png if desired */
+  background-image: url('assets/images/logo-icon.png');
 }
 
 .header-info {
