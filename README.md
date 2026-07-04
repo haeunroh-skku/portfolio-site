@@ -14,7 +14,7 @@ portfolio-site/
 └── projects/
     ├── yield-analysis.html         # 반도체 수율 분석(SECOM) 상세
     ├── dew-point.html              # 이슬점 예측 시뮬레이션 상세
-    ├── notebookllm.html            # NotebookLLM 만들기 상세
+    ├── myknowledgechatbot.html     # My Knowledge Chatbot 만들기 상세
     ├── virtual-metrology.html      # Virtual Metrology 연구 상세
     ├── wafer-defect.html           # 웨이퍼 결함 패턴 분류 시스템 상세
     ├── biochem-seminar.html        # CHEMIC 세미나(PEGylation) 상세

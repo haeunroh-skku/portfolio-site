@@ -2,8 +2,9 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Knowledge Bot 만들기 — Haeun Roh</title>
+<title>My Knowledge Chatbot 만들기 — Haeun Roh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
@@ -29,7 +30,7 @@
     <div class="wrap">
       <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
       <div class="eyebrow">LLM / RAG</div>
-      <h1>My Knowledge Bot 만들기</h1>
+      <h1>My Knowledge Chatbot 만들기</h1>
       <p style="max-width:640px;">
         직접 정리한 전공 노트를 지식 베이스로 삼아, 그 내용에 근거해서만 답변하는
         개인용 학습 챗봇을 만든 프로젝트입니다. LangChain과 Gemini API, Chroma 벡터 DB로
@@ -42,7 +43,7 @@
         <div><span>구분</span><span>개인 프로젝트</span></div>
       </div>
       <div class="detail-stats">
-        <div><span>RAG</span><span>LangChain + Gemini 2.0 Flash</span></div>
+        <div><span>RAG</span><span>LangChain + Gemini 2.5 Flash</span></div>
         <div><span>k=4</span><span>청크 검색 개수</span></div>
         <div><span>3단계</span><span>구조화된 답변 형식</span></div>
       </div>
@@ -67,7 +68,7 @@
             청년 Hy-po 9기 프로그램 기간 동안, 그동안 정리해온 전공(물성 및 소자 등) 노트를
             Google Drive의 마크다운 파일로 관리하고 있었는데, 필요할 때 원하는 개념을 빠르게
             찾기가 어려웠습니다. 이를 해결하기 위해 내 노트만을 근거로 답변하는 개인용
-            RAG 챗봇 "하이포_챗"을 Google Colab 환경에서 구현했습니다.
+            RAG 챗봇 "하이포_챗"을 Google Colab 환경에서 구현했습니다. 키워드별로 한 줄 정리, 상세 설명(원리), 산업 동향, 내 의견을 구조적으로 정리했습니다. 내 언어로 정리했기 때문에 이를 바탕으로 제공되는 챗봇의 답이 매우 도움될 것이라 생각했습니다.
           </p>
           <div class="callout">
             <strong>목표:</strong> 일반 LLM처럼 근거 없이 답하는 것이 아니라, 내가 작성한
@@ -93,10 +94,11 @@
             <code>MarkdownTextSplitter</code>(chunk_size=500, chunk_overlap=50)로 청크 분할하고,
             Gemini 임베딩 모델(<code>gemini-embedding-001</code>)로 임베딩해 Chroma 벡터DB에 저장했습니다.
             질의응답 시에는 <code>retriever(k=4)</code>로 관련 청크 4개를 검색해 프롬프트에
-            컨텍스트로 주입하고, <code>gemini-2.0-flash</code> 모델이 아래 형식으로 답하도록
-            프롬프트 템플릿을 설계했습니다.
+            컨텍스트로 주입하고, <code>gemini-2.5-flash</code> 모델이 아래 형식으로 답하도록
+            <code>ChatPromptTemplate</code>으로 system/user 메시지를 분리해 프롬프트를 설계했습니다.
           </p>
           <ul class="bullets">
+            <li>0. (필수) "안녕하세요! 하이포에서 X월 Y일 배운 Z 키워드 내용과 관련있네요!" — 노트 작성일과 핵심 키워드를 답변 서두에 자동으로 채워 넣도록 지시</li>
             <li>1. 핵심 개념</li>
             <li>2. 수율/공정과의 연관성</li>
             <li>3. 더 찾아볼 키워드</li>
@@ -105,7 +107,10 @@
             체인 구성은 <code>{"context": retriever, "question": RunnablePassthrough()} | PROMPT | llm | StrOutputParser()</code>
             형태의 LangChain LCEL 파이프라인이며, Colab에서 <code>ipywidgets</code>로 간단한
             채팅 UI(입력창·전송·대화 초기화 버튼, 말풍선 렌더링)를 구현해 바로 사용할 수
-            있도록 했습니다.
+            있도록 했습니다. 답변에 포함된 마크다운 문법(<code>**</code>, 목록 등)은
+            <code>markdown</code> 라이브러리로 HTML로 변환해 렌더링하고, ChromaDB 접근 중
+            발생할 수 있는 disk I/O 오류 등은 별도로 감지해 원인과 해결 방법을 안내하도록
+            예외 처리를 추가했습니다.
           </p>
           <div class="flowchart">
             <div class="flowchart-row">
@@ -123,7 +128,7 @@
               <div class="flowchart-arrow">→</div>
               <div class="flowchart-box dim">프롬프트 주입</div>
               <div class="flowchart-arrow">→</div>
-              <div class="flowchart-box highlight">Gemini 2.0 Flash&#10;응답</div>
+              <div class="flowchart-box highlight">Gemini 2.5 Flash&#10;응답</div>
             </div>
           </div>
           <div class="callout">
@@ -135,12 +140,47 @@
         <section id="result">
           <h2>결과</h2>
           <p>
-            현재는 "물성 및 소자" 과목 노트 2개 파일(총 8개 청크)로 우선 검증했고, 질문을 입력하면
-            해당 노트 내용을 근거로 핵심 개념·수율 공정과의 연관성·추가 학습 키워드까지 구조화된
-            답변을 받을 수 있음을 확인했습니다. ipywidgets 기반 채팅 UI에서 실시간으로
-            질의응답이 가능합니다.
+            현재는 "물성 및 소자", "반도체 공정" 등 과목 노트 30개 파일로 검증했고, 질문을 입력하면
+            노트가 작성된 날짜와 핵심 키워드를 자동으로 인식해 인사말로 안내한 뒤, 해당 노트
+            내용을 근거로 핵심 개념·수율 공정과의 연관성·추가 학습 키워드까지 구조화된 답변을
+            받을 수 있음을 확인했습니다. ipywidgets 기반 채팅 UI에서 마크다운 서식이 적용된
+            답변으로 실시간 질의응답이 가능합니다.
           </p>
-          <div class="placeholder-figure">[ 챗봇 UI 스크린샷 / 질의응답 예시 자리 ]</div>
+          <div class="chat-mock">
+            <div class="chat-mock-toolbar">
+              <div class="chat-mock-input">질문을 입력하세요...</div>
+              <div class="chat-mock-btn">전송</div>
+              <div class="chat-mock-btn">대화 초기화</div>
+            </div>
+            <div class="chat-row user">
+              <span class="chat-label">나</span>
+              <div class="chat-bubble user">CPO가 뭐더라? 내가 뭐라고 필기해뒀지?</div>
+            </div>
+            <div class="chat-row bot">
+              <span class="chat-label">챗봇</span>
+              <div class="chat-bubble bot">
+                <p>안녕하세요! 하이포에서 6월 29일 배운 CPO(Co-packaged optics) 내용과 관련있네요!</p>
+                <p><strong>1. 핵심 개념</strong><br>CPO(Co-packaged optics)는 연산 기능을 가진 반도체(GPU, NPU 등)와 전기 신호를 빛으로 바꿔 대용량 데이터를 외부와 송수신하는 반도체(실리콘 포토닉스, 광학 칩)를 하나의 패키지 안에 수 mm 이내로 근접하게 배치하는 차세대 패키징 기술입니다. 기존에는 전기 신호가 구리 배선을 타고 이동하며 정보 손실, 속도 저하, 전력 소모, 발열 등의 문제가 발생했지만, CPO는 이러한 문제를 해결하여 전력 소모를 크게 줄이고 더 큰 대역폭을 지원할 수 있게 합니다.</p>
+                <p><strong>2. 수율/공정과의 연관성</strong><br>CPO는 여러 종류의 칩을 하나의 패키지 안에 고도로 집적하는 기술이므로, 수율과 공정 측면에서 다음과 같은 연관성을 가집니다.</p>
+                <ul>
+                  <li><strong>고난도 패키징 공정:</strong> 메인 반도체와 광학 칩을 수 mm 이내로 근접하게 배치하고 결합하는 것은 매우 정밀한 어셈블리 및 본딩 공정을 요구합니다. 칩 정렬 불량, 접합 불량, 이종 재료 간 호환성 문제 등이 전체 패키지 수율에 직접 영향을 미칩니다.</li>
+                  <li><strong>열 관리:</strong> 고성능 연산 칩과 광학 칩이 한 패키지 안에 집적되며 발생하는 발열을 효과적으로 제어하지 못하면 성능 저하와 신뢰성 문제로 수율이 떨어질 수 있습니다.</li>
+                  <li><strong>신호 무결성:</strong> 전기·광 신호 변환 및 전송 과정에서 손실을 최소화해야 하며, 인터페이스 설계와 제조 정밀도에 따라 최종 제품 성능·수율이 좌우됩니다.</li>
+                  <li><strong>이종 집적 기술:</strong> 연산 칩과 광학 칩(실리콘 포토닉스)을 통합하는 이종 집적(Heterogeneous Integration) 기술이 CPO 수율 향상의 핵심 요소입니다.</li>
+                </ul>
+                <p><strong>3. 더 찾아볼 키워드</strong></p>
+                <ul>
+                  <li>실리콘 포토닉스 (Silicon Photonics)</li>
+                  <li>이종 집적 (Heterogeneous Integration)</li>
+                  <li>어드밴스드 패키징 (Advanced Packaging)</li>
+                  <li>광통신 모듈 (Optical Transceiver Module)</li>
+                  <li>데이터센터 아키텍처 (Data Center Architecture)</li>
+                  <li>열 관리 기술 (Thermal Management Technology)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="figure-caption">실제 실행 화면을 옮겨 재구성한 질의응답 예시 — "물성 및 소자" 노트 기반 CPO 질문</div>
         </section>
 
         <section id="learning">
@@ -148,6 +188,7 @@
           <ul class="bullets">
             <li>청크 크기·overlap, retriever의 k값 등 RAG 하이퍼파라미터가 답변 품질에 미치는 영향을 직접 튜닝하며 체감했습니다</li>
             <li>프롬프트에 "답변 형식"을 명시적으로 지정하는 것만으로도 학습 목적에 맞는 구조화된 응답을 얻을 수 있음을 확인했습니다</li>
+            <li>system/user 메시지를 분리한 ChatPromptTemplate과 마크다운 렌더링, ChromaDB 오류 처리를 추가하며 실제 사용 가능한 수준으로 다듬는 과정에서 프롬프트 설계와 예외 처리의 중요성을 체감했습니다</li>
             <li>API 키를 코드에 하드코딩하지 않고 환경 변수/시크릿 매니저로 분리해야 한다는 점을 이번에 다시 체감했습니다 (다음 버전에서 반영 예정)</li>
             <li>향후 전공 노트 전체로 지식베이스를 확장하고, 출처 청크를 답변에 함께 표시하는 기능을 추가할 계획입니다</li>
           </ul>
