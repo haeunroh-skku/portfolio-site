@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이슬점 예측 시뮬레이션 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Simulation</div>
+      <h1>이슬점 예측 시뮬레이션</h1>
+      <p style="max-width:640px;">
+        Clausius-Clapeyron 방정식과 Magnus 근사식을 Python으로 구현해 온도·상대습도로부터
+        이슬점(dew point)과 안개 형성 가능성을 예측하는 시뮬레이션 및 계산 툴입니다.
+        열역학 수업 과제로 시작해 <strong>기획부터 구현까지 담당</strong>했고,
+        공학인증 우수 사례로 발표 제안을 받았습니다.
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2026.06</span></div>
+        <div><span>역할</span><span>기획·모델링·시뮬레이션 구현</span></div>
+        <div><span>스택</span><span>Python, NumPy, SciPy(Brent method), Matplotlib</span></div>
+        <div><span>구분</span><span>열역학 수업 과제 · 공학인증 발표 제안</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>2가지</span><span>계산법 교차 검증 (Magnus·C-C)</span></div>
+        <div><span>4단계</span><span>안개 형성 위험도 판정</span></div>
+        <div><span>실측 검증</span><span>2025 안동 지역 기상 데이터</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#approach">모델링 로직</a>
+        <a href="#viz">시각화</a>
+        <a href="#realdata">실측 데이터 적용</a>
+        <a href="#tool">계산 툴</a>
+        <a href="#learning">배운 점</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            클린룸·가스 배관이나 대기 환경에서 결로(이슬 맺힘)와 안개는 온도가 이슬점 아래로
+            내려갈 때 발생합니다. 이 프로젝트에서는 열역학의 Clausius-Clapeyron 방정식과
+            Magnus 근사식을 직접 구현해, 온도와 상대습도만으로 이슬점을 예측하고 안개
+            발생 가능성을 4단계로 판정하는 시뮬레이션과 대화형 계산 툴을 만들었습니다.
+          </p>
+          <div class="callout">
+            <strong>파이썬 구현:</strong> 기획·모델링·시각화·계산 툴을 코딩으로 구현하여 만든 시뮬레이션 과제로,
+          완성도를 인정받아 공학인증 상 자료로 채택 받았습니다.
+          </div>
+        </section>
+
+        <section id="approach">
+          <h2>모델링 로직</h2>
+          <p>구현은 크게 세 단계로 이루어집니다.</p>
+          <ul class="bullets">
+            <li>현재 기온 T와 상대습도 RH를 입력받아 포화수증기압 P_sat(T)를 계산</li>
+            <li>실제 수증기압 P_actual = (RH/100) × P_sat(T)를 구함</li>
+            <li>P_sat(Td) = P_actual을 만족하는 이슬점 Td를 역산하고, T − Td 차이를 기상청 판정 기준에 따라 분류해 안개 형성 가능성을 출력</li>
+          </ul>
+          <p>
+            이슬점 계산에는 두 가지 방법을 병행 적용해 서로 검증했습니다: <strong>① Magnus 역산 공식</strong>을
+            이용한 해석적 계산, <strong>② Clausius-Clapeyron 방정식</strong>에 대해 Brent method로
+            수치 역산하는 방법. 두 결과를 비교한 결과, 대기 온도 범위에서 Magnus 근사식이
+            Clausius-Clapeyron 방정식과 거의 동일한 결과를 냄을 확인했습니다.
+          </p>
+          <table class="data-table">
+            <tr><th>온도 T</th><th>P_sat</th><th>dP_sat/dT</th></tr>
+            <tr><td>0°C</td><td>6.1 hPa</td><td>0.44 hPa/°C</td></tr>
+            <tr><td>10°C</td><td>12.3 hPa</td><td>0.89 hPa/°C</td></tr>
+            <tr><td>20°C</td><td>23.4 hPa</td><td>1.72 hPa/°C</td></tr>
+            <tr><td>30°C</td><td>42.4 hPa</td><td>3.12 hPa/°C</td></tr>
+          </table>
+        </section>
+
+        <section id="viz">
+          <h2>시각화</h2>
+
+          <p><strong>① 온도–포화수증기압 곡선</strong></p>
+          <p>
+            −30°C ~ 50°C 범위에서 두 방정식으로 계산한 포화수증기압과 Steam Table 참조값을
+            비교했습니다. 두 방정식 모두 대기 온도 범위(−20°C ~ 40°C)에서 Steam Table과 잘
+            일치했고, 반로그 그래프에서 두 곡선이 직선에 가깝게 나타나는 것은 ln(P_sat)가
+            1/T에 대해 선형이라는 Clausius-Clapeyron 방정식의 수학적 구조와 정확히 일치합니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/dp-vapor-pressure.png" alt="온도-포화수증기압 곡선 (선형 / 반로그 스케일)">
+            <div class="figure-caption">그림 1. 온도-포화수증기압 곡선 (좌: 선형, 우: 반로그 스케일)</div>
+          </div>
+
+          <p><strong>② 상대습도별 이슬점 곡선</strong></p>
+          <p>
+            RH 40~100% 조건에서 Magnus 역산으로 이슬점 곡선을 계산했습니다. 기상청 안개
+            예보 기준(T−Td ≤ 1°C: 안개 발생, T−Td ≤ 2.5°C: 안개 가능성 높음)에 따라 음영
+            구간을 표시했습니다. 예를 들어 기온 15°C일 때 RH 90%이면 이슬점 약 13.4°C
+            (T−Td ≈ 1.6°C)로 안개 주의 구간이지만, RH 60%이면 이슬점 약 7.1°C
+            (T−Td ≈ 7.9°C)로 안개 발생 가능성이 낮습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/dp-rh-curves.png" alt="상대습도별 이슬점 곡선">
+            <div class="figure-caption">그림 2. 상대습도별 이슬점 곡선 및 안개 형성 구간</div>
+          </div>
+
+          <p><strong>③ T-RH 안개 형성 조건 히트맵</strong></p>
+          <p>
+            온도(−5°C~35°C) × 상대습도(40%~100%) 전체 조합에 대해 이슬점과 T−Td 차이를
+            2차원 컬러맵으로 표현했습니다. 고습(RH ≥ 90%)이거나 저온일수록 T−Td가 작아져
+            안개 위험 구간이 넓어짐을 확인했습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/dp-trh-heatmap.png" alt="T-RH 안개 형성 조건 히트맵">
+            <div class="figure-caption">그림 3. T-RH 안개 형성 조건 히트맵</div>
+          </div>
+
+          <p><strong>④ Clausius-Clapeyron 기울기 분석</strong></p>
+          <p>
+            포화 곡선의 기울기 dP_sat/dT = (ΔH_vap / R·T²) × P_sat를 온도의 함수로 계산했습니다.
+            온도가 10°C에서 30°C로 상승하면 기울기는 약 3.5배 증가하는데, 이는 고온 조건에서
+            소량의 기온 강하만으로도 포화 상태에 도달할 수 있음을 의미하며 여름철 새벽에
+            복사 안개가 자주 발생하는 이유를 열역학적으로 설명합니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/dp-cc-slope.png" alt="Clausius-Clapeyron 기울기 분석">
+            <div class="figure-caption">그림 4. Clausius-Clapeyron 기울기 분석 (−10, 0, 15, 30°C 접선)</div>
+          </div>
+        </section>
+
+        <section id="realdata">
+          <h2>실측 데이터 적용 — 안동 지역 사례</h2>
+          <p>
+            2025년 안동 지역의 시간별 기상 데이터(기온, 상대습도)를 입력으로 구현한 알고리즘을
+            실제 대기 조건에 적용했습니다. 각 관측 시각의 기온·상대습도로부터 이슬점을 계산하고
+            T−Td 차이에 따라 안개 위험도를 분류한 결과, 기온과 이슬점이 근접하거나 교차하는
+            시간대가 안개 형성 가능 구간으로 나타났으며, 이를 통해 안동 지역의 안개 형성
+            패턴을 정량적으로 확인할 수 있었습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/dp-andong-data.png" alt="2025 안동 지역 기상 데이터 분석">
+            <div class="figure-caption">그림 5. 2025 안동 지역 기상 데이터 분석 — 기온·이슬점 시계열 / 상대습도 / T−Td 위험 지표 / 안개 위험도 분포 / 기온-습도 산점도</div>
+          </div>
+        </section>
+
+        <section id="tool">
+          <h2>이슬점 예측 계산 툴</h2>
+          <p>
+            현재 기온과 상대습도를 입력하면 이슬점과 안개 형성 조건을 즉시 출력하는 대화형
+            계산기를 구현했습니다. 슬라이더로 기온·상대습도·냉각 범위를 설정하면 이슬점 온도
+            (Magnus/C-C 두 방법 동시 출력), 포화·실제 수증기압, T−Td 및 4단계 안개 판정,
+            0.5°C 단계별 냉각 시나리오 표와 냉각 경로 그래프가 자동 계산됩니다.
+          </p>
+          <p>
+            예를 들어 기온 15°C, 상대습도 80% 조건에서는 이슬점 약 11.5°C, T−Td = 3.42°C로
+            "가능성 낮음"으로 판정되며, 냉각 시나리오상 약 13°C 아래로 내려가면 안개 주의
+            단계에 진입해 11.5°C에서 포화 상태에 도달함을 확인할 수 있습니다.
+          </p>
+          <div class="figure-row">
+            <div class="figure">
+              <img src="../assets/images/dp-calculator.png" alt="이슬점 예측 계산기 UI">
+              <div class="figure-caption">그림 6. 이슬점 예측 계산기 사용 예시</div>
+            </div>
+            <div class="figure">
+              <img src="../assets/images/dp-cooling-path.png" alt="냉각 경로 분석 그래프">
+              <div class="figure-caption">냉각 경로 그래프 (T=15°C, RH=80%)</div>
+            </div>
+          </div>
+          <p style="margin-top:20px;">
+          
+          </p>
+        </section>
+
+        <section id="learning">
+          <h2>배운 점 & 향후 계획</h2>
+          <ul class="bullets">
+            <li>서로 다른 두 계산 방식(해석적 Magnus 근사 vs 수치적 Brent method 역산)을 교차 검증하며, 근사식이 실제 방정식을 얼마나 잘 대체할 수 있는지 정량적으로 확인하는 법을 익혔습니다</li>
+            <li>실제 관측 데이터(안동 지역)에 모델을 적용해보면서, 이론적으로 잘 맞는 모델도 실측 데이터 특유의 노이즈·패턴과 어떻게 만나는지 확인하는 경험을 했습니다</li>
+            <li>향후 특정 공정 구간(클린룸, 가스 배관 등)의 실제 온습도 로그에 적용해 결로 위험 구간을 사전 경보하는 형태로 확장하고 싶습니다</li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="virtual-metrology.html">← 이전 프로젝트: Virtual Metrology</a>
+      <a href="notebookllm.html">다음 프로젝트: NotebookLLM 만들기 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=3"></script>
+</body>
+</html>

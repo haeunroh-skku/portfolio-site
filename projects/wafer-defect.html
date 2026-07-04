@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웨이퍼 결함 패턴 분류 및 PHI 기반 설비 점검 우선순위 도출 시스템 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Research</div>
+      <h1>웨이퍼 결함 패턴 분류 및 PHI 기반 설비 점검 우선순위 도출 시스템</h1>
+      <p style="max-width:640px;">
+        화공인공지능 수업 팀 프로젝트. 웨이퍼 맵 결함 패턴을 CNN으로 분류하고, 결함 심각도(Severity)와 공정 건전성 지수(PHI)를 결합해 설비 점검 우선순위를 자동 도출하는
+        시스템을 설계했습니다.
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2026 상반기 (2026.06.04 발표)</span></div>
+        <div><span>역할</span><span>팀 프로젝트 (노하은 외 4명)</span></div>
+        <div><span>스택</span><span>EfficientNet-B0, DBSCAN, AHP, PCA류 통계 기법</span></div>
+        <div><span>데이터</span><span>WM-811K (Kaggle, Wu et al. 2015) — 897장, 9개 클래스</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>85.6%</span><span>분류 정확도</span></div>
+        <div><span>85.8%</span><span>Macro F1-score</span></div>
+        <div><span>ρ = 0.9995</span><span>가중치 ±20% 섭동 안정성</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#problem">문제 정의</a>
+        <a href="#approach">접근 방법</a>
+        <a href="#result">결과</a>
+        <a href="#limitation">한계 및 향후 계획</a>
+        <a href="#files">첨부 자료</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            하루 수만 장 이상 생산되는 웨이퍼 맵을 육안으로 검사하는 것은 비효율적이고
+            병목을 유발합니다. 기존 연구는 단순 결함 분류(classification)에 그쳐 원인 공정
+            추정이나 점검 우선순위 판단으로 이어지지 못한다는 한계가 있었습니다. 이 프로젝트는
+            웨이퍼 맵 기반 불량 심각도 분석과 공정 점검 우선순위 도출까지 하나의 흐름으로
+            구현하는 AI 시스템을 목표로 했습니다.
+          </p>
+          <div class="callout">
+            <strong>파이프라인:</strong> CNN 분류 → 결함 심각도(R·C·Pe·Pc) 산출 → AHP 가중합
+            → PHI(공정 건전성 지수) → 설비 점검 Action Plan
+          </div>
+        </section>
+
+        <section id="problem">
+          <h2>문제 정의</h2>
+          <ul class="bullets">
+            <li>미세 공정 + 대량 생산 환경에서는 미세 결함도 전체 수율에 직결되지만, 결함 분류만으로는 "어떤 공정/설비를 먼저 점검해야 하는지" 판단할 수 없었음</li>
+            <li>화학공학적으로는 박막 증착·식각·확산·세정 등 단위공정과 결함 원인의 상관관계를 이해해야 하고, AI로는 대량 웨이퍼 맵에서 패턴을 자동 분류하고 이상 징후를 탐지해야 하는 두 축이 모두 필요했음</li>
+            <li>단일 분류 정확도만으로는 결함의 심각도(공간적 집중도, 위치 등)를 반영하지 못함</li>
+          </ul>
+        </section>
+
+        <section id="approach">
+          <h2>접근 방법</h2>
+
+          <p><strong>데이터 및 분류 모델</strong></p>
+          <ul class="bullets">
+            <li>WM-811K 데이터셋에서 897장 추출, 9개 클래스(정상 None 1개 + Edge-Local·Edge-Ring·Donut·Center·Local·Scratch·Random·Near-full 8개)로 구성</li>
+            <li>웨이퍼마다 다이 수·레이아웃이 달라 128×128로 정규화 후 EfficientNet-B0(ImageNet 사전학습)로 전이학습, 마지막 분류기만 9개 클래스로 교체</li>
+            <li>Train/Val/Test = 80/10/10, Batch size 32, 총 30 epoch, AdamW + Cosine Annealing, Val macro F1 최댓값 저장 + patience=7 조기 종료</li>
+          </ul>
+          <div class="figure">
+            <img src="../assets/images/wd-wafer-samples.png" alt="클래스별 웨이퍼 맵 샘플">
+            <div class="figure-caption">클래스별 웨이퍼 맵 샘플 (9개 클래스)</div>
+          </div>
+
+          <p style="margin-top:20px;"><strong>결함 심각도(Severity Score)</strong></p>
+          <p>
+            그레이스케일 임계화 → 결함 픽셀 추출 → DBSCAN 군집성 계산 → 4개 지표(R: 결함 비율,
+            C: 공간 집중도, Pe: 가장자리 비율, Pc: 중심 비율) 산출 → AHP(Analytic Hierarchy
+            Process) 가중합으로 0~100점 심각도 점수화했습니다.
+          </p>
+          <table class="data-table">
+            <tr><th>지표</th><th>R (결함비율)</th><th>C (공간집중도)</th><th>Pe (가장자리)</th><th>Pc (중심)</th></tr>
+            <tr><td>AHP 가중치</td><td>0.263</td><td class="highlight">0.455</td><td>0.141</td><td>0.141</td></tr>
+          </table>
+          <p style="font-size:13px; color:var(--text-faint);">
+            Severity = (w1·R + w2·C + w3·Pe + w4·Pc) / (w1+w2+w3+w4) × 100 으로 0~100점 정규화.
+            등급: μ+0.5σ 이상 MEDIUM, μ+1.5σ 이상 HIGH (CR &lt; 0.1)
+          </p>
+          <p>
+            공간집중도(C)에 가장 큰 가중치를 둔 것은, 특정 영역에 결함이 무작위가 아니라
+            비무작위로 군집될수록 systematic defect·설비 이상을 더 직접적으로 시사하기
+            때문입니다.
+          </p>
+
+          <p style="margin-top:20px;"><strong>공정 건전성 지수(PHI)와 설비 점검 권고</strong></p>
+          <ul class="bullets">
+            <li>PHI 정의: E = 정상군 평균 대비 초과 심각도 (정상 조건에서는 E≈0 → PHI≈100%)</li>
+            <li>SPC 고정 보정: HIGH 경계(μ+1.5σ)에서 PHI=50%가 되도록 보정 계수 α 고정 → MEDIUM 경계(μ+0.5σ)에서는 PHI≈79%로 MONITOR 임계값(80%)과 정합</li>
+            <li>등급 체계: NORMAL(PHI≥80%, 조치 불필요) / MONITOR(50~80%, 예방정비) / URGENT(&lt;50%, 즉각 점검)</li>
+            <li>결함 패턴별 우선 점검 공정·설비 후보군을 EQUIPMENT_DB로 매핑하되, 단일 원인 확정이 아닌 decision-support 방식으로 제한</li>
+          </ul>
+        </section>
+
+        <section id="result">
+          <h2>결과</h2>
+          <p>내부 테스트셋(90장) 기준 클래스별 분류 성능:</p>
+          <table class="data-table">
+            <tr><th>클래스</th><th>F1-score</th></tr>
+            <tr><td>Near full</td><td class="highlight">1.00</td></tr>
+            <tr><td>Edge Ring</td><td>0.95</td></tr>
+            <tr><td>None</td><td>0.95</td></tr>
+            <tr><td>Donut</td><td>0.90</td></tr>
+            <tr><td>Edge local</td><td>0.89</td></tr>
+            <tr><td>Random</td><td>0.82</td></tr>
+            <tr><td>Center</td><td>0.77</td></tr>
+            <tr><td>Local</td><td>0.75</td></tr>
+            <tr><td>Scratch</td><td>0.70</td></tr>
+          </table>
+          <p>
+            <strong>Scratch(0.70)·Local(0.75)이 상대적으로 낮았고</strong>, Edge-Ring↔Edge-Loc,
+            Scratch↔Local 간 혼동이 관찰되었습니다 — 시각적으로 유사한 국소·선형 결함 패턴이기 때문입니다.
+          </p>
+
+          <p style="margin-top:24px;">클래스별 설비 점검 권고 분포 및 평균 PHI:</p>
+          <table class="data-table">
+            <tr><th>클래스</th><th>URGENT</th><th>MONITOR</th><th>NORMAL</th><th>평균 PHI</th></tr>
+            <tr><td>Near full</td><td>10</td><td>0</td><td>0</td><td>0.0%</td></tr>
+            <tr><td>Random</td><td>10</td><td>0</td><td>0</td><td>2.4%</td></tr>
+            <tr><td>Donut</td><td>11</td><td>0</td><td>0</td><td>6.2%</td></tr>
+            <tr><td>Edge Ring</td><td>9</td><td>1</td><td>0</td><td>12.8%</td></tr>
+            <tr><td>Edge Local</td><td>9</td><td>0</td><td>1</td><td>26.3%</td></tr>
+            <tr><td>Local</td><td>7</td><td>3</td><td>0</td><td>33.7%</td></tr>
+            <tr><td>Scratch</td><td>2</td><td>6</td><td>2</td><td>62.6%</td></tr>
+            <tr><td>Center</td><td>2</td><td>3</td><td>5</td><td>71.5%</td></tr>
+            <tr><td>None</td><td>0</td><td>1</td><td>8</td><td>95.0%</td></tr>
+            <tr><td class="highlight">Total (90장)</td><td class="highlight">60 (66.7%)</td><td class="highlight">14 (15.6%)</td><td class="highlight">16 (17.8%)</td><td class="highlight">34.5%</td></tr>
+          </table>
+          <p>
+            평균 PHI는 <strong>Near full(0%)에서 None(95%)까지 물리적 심각도 순서와 일관되게</strong> 나타났습니다.
+            AHP 가중치를 ±20% 무작위로 섭동시켜 검증(60장 표본)한 결과 평균 Spearman ρ = 0.9995
+            (최소 0.9983)로, 가중치 오차에도 점검 우선순위가 거의 변동하지 않아 프레임워크의
+            구조적 안정성을 확인했습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/wd-severity-phi.png" alt="클래스별 Severity 및 PHI 분포">
+            <div class="figure-caption">클래스별 Severity(좌) 및 PHI(우) 분포 — near full/Center는 HIGH severity, none은 LOW</div>
+          </div>
+          <div class="figure">
+            <img src="../assets/images/wd-confusion-matrix.png" alt="정규화 혼동행렬">
+            <div class="figure-caption">정규화 혼동행렬 (Test Set)</div>
+          </div>
+        </section>
+
+        <section id="limitation">
+          <h2>한계 및 향후 계획</h2>
+          <ul class="bullets">
+            <li>지도학습 기반이라 학습 데이터에 없는 새로운·복합 패턴은 판단하기 어려워, 보조 지표로 해석할 필요가 있음</li>
+            <li>WM-811K는 명확한 단일 패턴 중심 공개 데이터라 애매한 패턴·복합 결함이 적어 Scratch·Local의 F1이 상대적으로 낮았음 — 향후 data augmentation과 실제 fab 데이터 검증 필요</li>
+            <li>웨이퍼 맵만으로는 공정 history·장비 로그·레시피·metrology 데이터를 통합하지 못해, 단일 원인 확정이 아닌 decision-support 방식으로 제한됨</li>
+            <li>AHP 가중치는 문헌 기반의 합리적 가정이며 실측 최적값은 아니고, PHI는 절대 수율을 예측하지 못함 — 향후 실측 yield·장비 이력으로 재학습 필요</li>
+            <li>향후 계획: 비지도/준지도 확장(클러스터링, one-class, autoencoder)으로 라벨 밖 새로운 패턴 탐지, multi-label 모델로 복합 패턴 대응, 장비 로그·레시피·lot 이력 통합, 실제 fab 데이터 기반 가중치 재추정</li>
+          </ul>
+        </section>
+
+        <section id="files">
+          <h2>첨부 자료</h2>
+          <p>
+            <a href="../assets/docs/wafer-defect-slides.pptx" class="btn btn-ghost" download>발표자료 다운로드</a>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="yield-analysis.html">← 이전 프로젝트: 반도체 수율 분석 (SECOM)</a>
+      <a href="virtual-metrology.html">다음 프로젝트: Virtual Metrology →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=3"></script>
+</body>
+</html>

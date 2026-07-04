@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Metrology for Oxide Etch Rate Prediction — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Research</div>
+      <h1>Virtual Metrology for Oxide Etch Rate Prediction URP</h1>
+      <p style="max-width:640px;">
+        Oxide Etch Rate Prediction under Varying O2 using Stepwise Forward Selection of
+        Principal Components — 플라즈마 에칭 모니터링 랩실 URP 연구. OES·VI 센서 데이터로
+        SiO2 식각률을 실시간 예측하는 Virtual Metrology(VM) 모델을 구축했습니다.
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2025.12.22 – 2026.01.26 (URP)</span></div>
+        <div><span>역할</span><span>공동 연구 (노하은 외 2명)</span></div>
+        <div><span>스택</span><span>OES/VI 센서 데이터, PCF, SVS, PCA, MLR</span></div>
+        <div><span>구분</span><span>학부생 연구 프로그램(URP) · 성균관대 화학공학과 플라즈마 에칭 모니터링 랩실</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>R² = 0.88</span><span>Hybrid 모델 최고 성능</span></div>
+        <div><span>22개</span><span>OES(12) + VI(10) 변수</span></div>
+        <div><span>3기법</span><span>PCF · SVS · PCA 비교</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#problem">문제 정의</a>
+        <a href="#approach">접근 방법</a>
+        <a href="#result">결과</a>
+        <a href="#discussion">고찰</a>
+        <a href="#learning">배운 점</a>
+        <a href="#files">첨부 자료</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            반도체 공정이 미세화·3D 구조화되면서 공정 단계가 늘어날수록, 물리적 계측(metrology)의
+            지연은 즉각적인 Run-to-Run(R2R) 공정 제어에 큰 제약이 됩니다. 이 연구는 O2 조건이
+            변하는 SiO2 플라즈마 식각 공정에서, OES(광방출 분광)와 VI(전압-전류) 프로브 센서
+            데이터만으로 식각률(Etch Rate)을 실시간 예측하는 센서 기반 Virtual Metrology 모델을
+            구축하는 것을 목표로 했습니다.
+          </p>
+          <div class="callout">
+            <strong>핵심 과제(The Bottleneck):</strong> 기존 모델은 R²&lt;0.82 수준에 머물렀는데,
+            지배적인 OES 화학 인자(라디칼 밀도)가 미묘한 물리적 VI 신호를 가려버리는 것이
+            원인이었습니다. 이를 해결하려면 지배적 화학 인자는 그대로 살리면서, 저분산
+            주성분(PC4~PC15)에서 미세한 챔버 드리프트를 추출해야 했습니다.
+          </div>
+        </section>
+
+        <section id="problem">
+          <h2>문제 정의</h2>
+          <ul class="bullets">
+            <li>O2 조건이 달라질 때마다 SiO2 식각률을 실측하는 데 드는 지연이 즉각적 공정 제어를 어렵게 함</li>
+            <li>OES 12개 변수, VI 130개 원자료(10개 파생 변수)를 함께 쓰면 변수 간 다중공선성이 심해 단순 회귀로는 성능이 오르지 않음(Pearson R²=0.7846, SVS R²=0.6953)</li>
+            <li>OES 단일 변수 중심 접근(PCA R²=0.8246)만으로는 VI가 담고 있는 미세한 공정 변화가 반영되지 않음</li>
+          </ul>
+        </section>
+
+        <section id="approach">
+          <h2>접근 방법</h2>
+          <p><strong>변수 생성</strong></p>
+          <ul class="bullets">
+            <li>OES: Actinometry 기법으로 라디칼 밀도 변화(nF, nO, nCO, nCF2, nCF)를 Ar(750.49nm) 발광선 대비 상대값으로 정량화</li>
+            <li>OES: Ar Line-ratio 기법으로 전자밀도 ne(706.49/750.49, 상관 −0.92), 전자온도 Te(763.26/738.29, 상관 −0.93) 산출</li>
+            <li>VI: 전압·전류·위상·임피던스·파워·반사파워 6개 기본 변수 + Coupling Efficiency, Effective Power 등 조합 변수로 확장</li>
+          </ul>
+          <div class="figure">
+            <img src="../assets/images/vm-line-ratio.png" alt="Ar Line-ratio 기반 전자밀도·전자온도 상관관계 검증">
+            <div class="figure-caption">Ar Line-ratio로 산출한 ne(좌, 상관 −0.92)·Te(우, 상관 −0.93)와 Ion Probe 실측값 비교</div>
+          </div>
+          <p style="margin-top:20px;"><strong>변수 선택 및 모델링</strong></p>
+          <ul class="bullets">
+            <li>PCF(Pearson Correlation Filter): 변수 간 1:1 선형 상관성으로 개별 영향력 파악</li>
+            <li>SVS(Stepwise Vector/Forward Selection): 전체 데이터셋 학습·평가로 최적 feature 조합 도출</li>
+            <li>PCA: 고차원 데이터 행렬을 주성분으로 차원 분해 (OES+VI 결합)</li>
+            <li><strong>Hybrid 모델:</strong> 지배적 라디칼 밀도 변수(nF, nO 등)를 핵심 변수로 먼저 고정한 뒤, VI 정보가 반영된 저분산 주성분(PC4~PC15)을 추가해 SVS를 재실행 → 단일 기법 의존 시 발생하는 편향·변수 종속성 완화</li>
+          </ul>
+          <div class="flowchart">
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">OES Raw&#10;(1024)</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box dim">Actinometry /&#10;Line-ratio</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box">OES&#10;12개 변수</div>
+            </div>
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">VI Raw&#10;(130)</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box dim">Feature&#10;Filtering</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box">VI&#10;10개 변수</div>
+            </div>
+            <div class="flowchart-arrow down">↓</div>
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">PCF / SVS / PCA&#10;변수 선택</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box">Hybrid Model&#10;(OES + PC4~15)</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box highlight">R² = 0.88</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="result">
+          <h2>결과</h2>
+          <p>모델별 결정계수(R²) 비교:</p>
+          <table class="data-table">
+            <tr><th>모델</th><th>선택된 변수</th><th>R²</th></tr>
+            <tr><td>Pearson</td><td>nCF2, nCF, nF, ne, nO</td><td>0.7846</td></tr>
+            <tr><td>SVS</td><td>nCF2, nCO644, nCF, nO, nCO645</td><td>0.6953</td></tr>
+            <tr><td>PCA</td><td>PC10, PC8, PC9, PC6, PC4</td><td>0.8246</td></tr>
+            <tr><td class="highlight">Hybrid (OES + PC4-15)</td><td class="highlight">최고 성능</td><td class="highlight">0.8806</td></tr>
+          </table>
+          <p>
+            <strong>F 라디칼(nF)이 양(+)의 가중치로 가장 큰 영향력</strong>을 보여
+            <code>SiO2(s) + 4F(g) → SiF4(g)↑ + O2(g)</code> 반응 메커니즘과 일치했습니다.
+            또한 O2 첨가는 이중 효과를 보였는데, nO(777.03nm)는 양(+)의 기여(F 라디칼 해방을
+            통한 식각 촉진), nO(700.65nm)는 음(−)의 기여(라디칼 과포화로 인한 활성 부위 차단,
+            억제 효과)로 나타나 O2 농도에 따른 비선형 거동을 주성분 변수(PC4: macro-scale,
+            PC10: micro-scale)가 보완적으로 설명했습니다.
+          </p>
+          <div class="figure-row">
+            <div class="figure">
+              <img src="../assets/images/vm-r2-comparison.png" alt="모델별 R² 비교 막대그래프">
+              <div class="figure-caption">모델별 R² 비교 (Pearson·SVS·PCA)</div>
+            </div>
+            <div class="figure">
+              <img src="../assets/images/vm-feature-weights.png" alt="모델별 Feature Weight 비교 히트맵">
+              <div class="figure-caption">모델별 Feature Weight 비교</div>
+            </div>
+          </div>
+          <div class="figure">
+            <img src="../assets/images/vm-correlation-hybrid.png" alt="변수 간 상관관계 및 Hybrid 모델 계수">
+            <div class="figure-caption">변수 간 상관관계 분석(좌)과 Hybrid 모델의 표준화 계수(우, R²=0.8806)</div>
+          </div>
+        </section>
+
+        <section id="discussion">
+          <h2>고찰 및 후속 연구 제안</h2>
+          <p>
+            단일 기법(Pearson, SVS, PCA)은 각각 OES 편중 선택 또는 변수 간 종속성 문제로
+            한계가 있었지만, 지배적 화학 인자와 저분산 물리 정보를 함께 반영하는 Hybrid
+            접근으로 다중공선성 문제를 완화하고 예측 정확도를 R²=0.88까지 끌어올렸습니다.
+          </p>
+          <p>
+            다만 플라즈마 내부 반응 메커니즘의 비선형성으로 회귀 계수의 해석 안정성이
+            떨어지고, 적은 데이터 수로는 딥러닝 적용이 어렵다는 한계가 있었습니다. 후속
+            연구로는 PCA 기반 변수 선택에 Extreme Learning Machine(ELM)을 결합한
+            PCA+ELM Hybrid 모델을 제안하며, 이를 통해 Run-to-Run 온라인 학습 기반의
+            실시간 모니터링 정확도를 더 높일 수 있을 것으로 기대합니다.
+          </p>
+          <div class="callout">
+            <strong>졸업포스터 발표:</strong> 본 연구는 성균관대학교 화학공학과 학부생 연구
+            프로그램(URP) 졸업포스터 발표로 마무리되었습니다. 연구 배경부터 Hybrid 모델의
+            R²=0.88 성능 도출까지 전 과정을 담은 졸업포스터는 아래 첨부 자료에서 확인하실
+            수 있습니다.
+          </div>
+        </section>
+
+        <section id="learning">
+          <h2>배운 점</h2>
+          <ul class="bullets">
+            <li>예측 성능의 핵심은 raw data에서 변수를 단계적으로 정제·축소하는 전체 파이프라인에 있다는 것을 배웠습니다. 변수를 무작정 늘리면 과적합과 일반화 성능 저하로 이어지기 때문에, 물리·화학적 의미를 갖는 변수로 먼저 변환한 뒤 필수 변수를 최소 집합으로 확정하는 접근이 중요했습니다</li>
+            <li>플라즈마 SiO2 식각은 라디칼 생성–표면 반응–부산물 탈착이 연쇄적으로 연결된 반응계이므로, 각 단계(화학적 식각·물리적 충격·O2의 이중 역할)의 역할을 이해해야 변수 설계가 타당해진다는 것을 체감했습니다</li>
+            <li>feature selection은 해석과 결론의 타당성을 결정하는 단계이므로, 어떤 변수를 왜 만들고 왜 선택·제외하는지 근거를 명확히 정리해야 설득력 있는 보고서가 된다는 점을 배웠습니다</li>
+          </ul>
+        </section>
+
+        <section id="files">
+          <h2>첨부 자료</h2>
+          <p>
+            <a href="../assets/docs/virtual-metrology-slides.pptx" class="btn btn-ghost" download>발표자료 다운로드</a>
+            &nbsp;
+            <a href="../assets/docs/virtual-metrology-poster.pdf" class="btn btn-ghost" download>졸업포스터 다운로드</a>
+            &nbsp;
+            <a href="../assets/docs/virtual-metrology-report.pdf" class="btn btn-ghost" download>연구활동보고서 다운로드</a>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="wafer-defect.html">← 이전 프로젝트: 웨이퍼 결함 패턴 분류</a>
+      <a href="dew-point.html">다음 프로젝트: 이슬점 예측 시뮬레이션 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=3"></script>
+</body>
+</html>

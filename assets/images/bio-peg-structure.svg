@@ -1,0 +1,40 @@
+<svg viewBox="0 0 640 480" width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="640" height="480" fill="#ffffff"/>
+
+  <!-- Repeat unit panel -->
+  <g stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M235,78 L220,78 L220,162 L235,162"/>
+    <path d="M400,78 L415,78 L415,162 L400,162"/>
+    <polyline points="240,150 290,95 340,150 390,95"/>
+  </g>
+  <circle cx="390" cy="95" r="15" fill="#ffffff"/>
+  <text x="390" y="103" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1a1a1a">O</text>
+  <text x="428" y="182" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-style="italic" fill="#1a1a1a">n</text>
+
+  <!-- Extended chain -->
+  <g stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="70,340 112,298 154,340 196,298 238,340 280,298 322,340 364,298 406,340 448,298 490,340 532,298 574,340"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1a1a1a" text-anchor="middle">
+    <circle cx="196" cy="298" r="14" fill="#ffffff"/>
+    <text x="196" y="306">O</text>
+    <circle cx="322" cy="340" r="14" fill="#ffffff"/>
+    <text x="322" y="348">O</text>
+    <circle cx="448" cy="298" r="14" fill="#ffffff"/>
+    <text x="448" y="306">O</text>
+    <circle cx="574" cy="340" r="14" fill="#ffffff"/>
+    <text x="574" y="348">O</text>
+  </g>
+
+  <!-- continuation dots -->
+  <g fill="#aeaca5">
+    <circle cx="48" cy="352" r="3.5"/>
+    <circle cx="36" cy="360" r="3.5"/>
+    <circle cx="24" cy="368" r="3.5"/>
+    <circle cx="592" cy="352" r="3.5"/>
+    <circle cx="604" cy="360" r="3.5"/>
+    <circle cx="616" cy="368" r="3.5"/>
+  </g>
+
+  <text x="320" y="440" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#767570">Polyethylene Glycol (PEG) repeat unit: -(CH2CH2O)n-</text>
+</svg>
