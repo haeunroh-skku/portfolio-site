@@ -120,8 +120,8 @@ p { color: var(--text-dim); margin: 0 0 16px; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* Add an icon image at assets/images/logo-icon.png if desired */
-  background-image: url('assets/images/logo-icon.png');
+  /* Use existing circular logo as the small icon (no new file needed) */
+  background-image: url('assets/images/logo-circle.png');
 }
 
 .header-info {
