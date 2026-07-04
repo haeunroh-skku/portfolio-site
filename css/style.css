@@ -109,6 +109,15 @@ p { color: var(--text-dim); margin: 0 0 16px; }
   line-height: 1;
 }
 
+/* Logo image styles */
+.brand-logo img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+}
+
 .header-info {
   display: flex;
   flex-direction: column;
