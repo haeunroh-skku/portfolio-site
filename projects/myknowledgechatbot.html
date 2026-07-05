@@ -32,15 +32,15 @@
       <div class="eyebrow">LLM / RAG</div>
       <h1>My Knowledge Chatbot 만들기</h1>
       <p style="max-width:640px;">
-        Hy-Po 9기 수업을 진행하면서 정리한 온라인 노트를 베이스로 삼아, 그 내용에 근거해서만 답변하는
+        Hy-Po 9기 수업을 진행하면서 정리한 온라인 노트를 베이스로 삼아 그 내용에 근거해서만 답변하는
         개인용 학습 챗봇을 만든 프로젝트입니다. LangChain과 Gemini API, Chroma 벡터 DB로
         검색 증강 생성(RAG) 파이프라인을 구성했습니다.
       </p>
       <div class="detail-meta">
         <div><span>기간</span><span>2026.06 – 2026.08 (청년 Hy-po 9기)</span></div>
-        <div><span>역할</span><span>개인 프로젝트</span></div>
-        <div><span>스택</span><span>LangChain, Google Gemini API, Chroma, Google Colab</span></div>
         <div><span>구분</span><span>개인 프로젝트</span></div>
+        <div><span>스택</span><span>LangChain, Google Gemini API, Chroma, Google Colab</span></div>
+
       </div>
       <div class="detail-stats">
         <div><span>RAG</span><span>LangChain + Gemini 2.5 Flash</span></div>
@@ -66,13 +66,13 @@
         <section id="overview">
           <h2>개요</h2>
           <p>
-            청년 Hy-po 9기 프로그램을 들으며 매일 한 시간씩, 교육 중 나온 물성·소자·반도체 공정
+            청년 Hy-po 9기 프로그램을 들으며 매일 교육 중 나온 물성·소자·반도체 공정
             관련 생소한 용어들을 복습하고 정리했습니다. 회로·소자·생산관리 등 여러 과목에서
-            배우는 용어를 수율 엔지니어의 시각으로 다시 정리해두는 과정은 꼭 필요했지만, 막상
+            배우는 용어를 수율 엔지니어의 시각으로 다시 정리해두는 과정이 꼭 필요했는데, 막상
             같은 개념이 다시 나왔을 때 예전에 정리해둔 내 노트를 빠르게 찾아보기가 어려웠습니다.
-            이를 해결하기 위해 내가 작성한 노트만을 근거로 답변하는 개인용 RAG 챗봇 "하이포_챗"을
+            이를 해결해볼 방법으로 내가 작성한 노트만을 근거로 답변하는 개인용 RAG 챗봇 "하이포_챗"을
             Google Colab 환경에서 구현했습니다. 노트는 키워드마다 한 줄 정리·상세 설명·산업
-            동향·내 의견 순으로 작성해뒀습니다.
+            동향·내 의견 순으로 작성해두었습니다.
           </p>
           <div class="callout">
             <strong>목표:</strong> 내가 작성한
@@ -84,9 +84,9 @@
         <section id="problem">
           <h2>문제 정의</h2>
           <ul class="bullets">
-            <li>여러 폴더에 흩어진 노트를 매번 직접 검색해서 원하는 부분을 찾아 읽어야 했던 비효율</li>
+            <li>여러 폴더 중 노트를 매번 직접 검색해서 원하는 부분을 찾아 읽어야 했던 비효율</li>
             <li>일반 LLM에 그냥 질문하면 전공 맥락과 무관한 일반론적 답변(할루시네이션 위험)이 나오는 문제</li>
-            <li>단순 답변이 아니라 "언제 배웠는지 → 개념 복기 → 수율/공정과의 연관성 → 더 찾아볼 키워드" 순서로, 나에게 맞춰 구조화된 답변이 필요했음</li>
+            <li>단순 답변이 아니라 "언제 배웠는지 → 개념 복기 → 수율/공정과의 연관성 → 더 찾아볼 키워드" 순서로, 나에게 맞춰 구조화된 답변이 필요</li>
           </ul>
         </section>
 
@@ -192,7 +192,7 @@
           <h2>배운 점 & 향후 계획</h2>
           <ul class="bullets">
             <li>청크 크기·overlap, retriever의 k값 등 RAG 하이퍼파라미터가 답변 품질에 미치는 영향을 직접 튜닝하며 느꼈습니다</li>
-            <li>프롬프트에 '답변 형식'을 명시적으로 지정하는 것만으로도 학습 목적에 맞는 구조화된 응답을 얻을 수 있음을 확인했습니다</li>
+            <li>프롬프트에 답변 형식을 명시적으로 지정하는 것만으로도 학습 목적에 맞는 구조화된 응답을 얻을 수 있음을 확인했습니다</li>
             <li>system/user 메시지를 분리한 ChatPromptTemplate과 마크다운 렌더링, ChromaDB 오류 처리를 추가하며 실제 사용 가능한 수준으로 다듬는 과정에서 프롬프트 설계와 예외 처리의 중요성을 체감했습니다</li>
             <li>API 키를 코드에 하드코딩하지 않고 환경 변수/시크릿 매니저로 분리해야 한다는 점을 체감해, 배포용 버전에서는 <code>.env</code> / Colab Secrets 기반으로 분리했습니다</li>
             <li>향후 전공 노트 전체로 지식베이스를 확장하고, 출처 청크를 답변에 함께 표시하는 기능을 추가해볼 계획입니다</li>
