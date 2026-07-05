@@ -58,6 +58,7 @@
         <a href="#approach">접근 방법</a>
         <a href="#result">결과</a>
         <a href="#learning">배운 점</a>
+        <a href="#files">첨부 자료</a>
       </nav>
 
       <div class="detail-content">
@@ -132,8 +133,9 @@
             </div>
           </div>
           <div class="callout">
-            <strong>참고:</strong> 실제 노트북 코드에는 개인 API 키가 포함되어 있어 원본 파일은
-            공개하지 않고, 파이프라인 구조만 정리해 소개합니다.
+            <strong>참고:</strong> 개인 학습 중 사용한 원본 노트북에는 API 키가 하드코딩되어 있어,
+            <code>.env</code> / Colab Secrets 기반으로 키를 분리한 배포용 버전을 별도로 정리해
+            GitHub에 공개했습니다. 아래 첨부 자료에서 확인하실 수 있습니다.
           </div>
         </section>
 
@@ -189,9 +191,16 @@
             <li>청크 크기·overlap, retriever의 k값 등 RAG 하이퍼파라미터가 답변 품질에 미치는 영향을 직접 튜닝하며 체감했습니다</li>
             <li>프롬프트에 "답변 형식"을 명시적으로 지정하는 것만으로도 학습 목적에 맞는 구조화된 응답을 얻을 수 있음을 확인했습니다</li>
             <li>system/user 메시지를 분리한 ChatPromptTemplate과 마크다운 렌더링, ChromaDB 오류 처리를 추가하며 실제 사용 가능한 수준으로 다듬는 과정에서 프롬프트 설계와 예외 처리의 중요성을 체감했습니다</li>
-            <li>API 키를 코드에 하드코딩하지 않고 환경 변수/시크릿 매니저로 분리해야 한다는 점을 이번에 다시 체감했습니다 (다음 버전에서 반영 예정)</li>
+            <li>API 키를 코드에 하드코딩하지 않고 환경 변수/시크릿 매니저로 분리해야 한다는 점을 체감해, 배포용 버전에서는 <code>.env</code> / Colab Secrets 기반으로 분리했습니다</li>
             <li>향후 전공 노트 전체로 지식베이스를 확장하고, 출처 청크를 답변에 함께 표시하는 기능을 추가할 계획입니다</li>
           </ul>
+        </section>
+
+        <section id="files">
+          <h2>첨부 자료</h2>
+          <p>
+            <a href="https://github.com/haeunroh-skku/my-knowledge-chatbot" target="_blank" rel="noopener" class="btn btn-ghost">GitHub Repository →</a>
+          </p>
         </section>
 
       </div>
