@@ -507,8 +507,8 @@ footer {
   margin: 0 auto;
   padding: 64px 24px;
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 56px;
+  grid-template-columns: 140px 1fr;
+  gap: 40px;
   align-items: start;
 }
 @media (max-width: 800px) {
