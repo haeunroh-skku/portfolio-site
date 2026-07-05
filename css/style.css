@@ -528,11 +528,6 @@ footer {
     top: 140px;
     left: max(24px, calc(50% - (var(--maxw) / 2) + 24px));
     width: 140px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     z-index: 5;
   }
 }
