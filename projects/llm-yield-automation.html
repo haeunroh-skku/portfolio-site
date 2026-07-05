@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 기반 반도체 공정 데이터 분석 및 수율 예측 자동화 시스템 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css?v=3">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Data Analysis · LLM</div>
+      <h1>LLM 기반 반도체 공정 데이터 분석 및 수율 예측 자동화 시스템</h1>
+      <p style="max-width:640px;">
+        작년 진행한 SECOM 프로젝트의 심화 버전입니다. 동일한 SECOM 데이터로 XGBoost 비교, 정량 평가,
+        LLM 자동 해석을 더해 작년에 보완하고 싶던 부분을 공부해 다시
+        구현했습니다.
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2026.07</span></div>
+        <div><span>역할</span><span>단독 진행 (전처리·모델링·LLM 파이프라인)</span></div>
+        <div><span>스택</span><span>Python, scikit-learn, XGBoost, LangChain, Gemini API</span></div>
+        <div><span>데이터</span><span>Kaggle SECOM (작년과 동일 데이터셋)</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>AUC 0.693</span><span>XGBoost 최고 성능</span></div>
+        <div><span>28, 59</span><span>두 모델 공통 핵심 변수</span></div>
+        <div><span>LLM</span><span>자동 해석 리포트 생성</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#problem">문제 정의</a>
+        <a href="#approach">접근 방법</a>
+        <a href="#result">결과</a>
+        <a href="#discussion">LLM 해석 리포트</a>
+        <a href="#learning">배운 점 & 한계</a>
+        <a href="#files">첨부 자료</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            작년 SECOM 수율 분석 프로젝트를 마치며 "다음에는 XGBoost·LightGBM 등 다른 분류
+            모델과 성능을 비교하고, 실시간 이상 탐지로 확장해보고 싶다"던 계획을
+            실행에 옮긴 후속 프로젝트입니다. 같은 SECOM 데이터셋에 결측치 처리 방식, 모델 비교,
+            정량 평가, 그리고 <strong>LLM 에이전트를 활용한 자동 해석 report 생성</strong>을
+            더해 작년보다 한 단계 심화된 분석 파이프라인을 구축했습니다.
+          </p>
+          <div class="callout">
+            <strong>개선 사항:</strong> 결측치 처리(mean → KNN Imputer) · 모델
+            비교(Random Forest 단일 → Random Forest + XGBoost) · 평가 방식(Feature Importance만
+            → F1·AUC·Confusion Matrix 정량 평가) · 신규(Gemini 기반 LLM이 분석 결과를 읽고
+            자동으로 해석 리포트를 작성하게 하기)
+          </div>
+        </section>
+
+        <section id="problem">
+          <h2>문제 정의</h2>
+          <ul class="bullets">
+            <li>작년 프로젝트는 Feature Importance만으로 핵심 변수를 도출했을 뿐, 모델의 실제 분류 성능(정밀도·재현율)을 검증하지 않았음</li>
+            <li>Random Forest 단일 모델만 사용해 다른 알고리즘 대비 상대적 성능을 알 수 없었음</li>
+            <li>분석 결과(수치·차트)를 현업 엔지니어가 읽고 바로 활용할 수 있는 해석과 액션 아이템으로 정리하는 과정이 수작업이었음</li>
+          </ul>
+        </section>
+
+        <section id="approach">
+          <h2>접근 방법</h2>
+          <p><strong>전처리</strong></p>
+          <ul class="bullets">
+            <li>결측치 20% 초과 컬럼 제거(작년과 동일 기준) 후 558개 변수로 축소</li>
+            <li>남은 결측치는 <strong>KNN Imputer(k=5)</strong>로 대체 — 작년의 단순 평균 대체보다 변수 간 유사도를 반영한 정교한 보간</li>
+          </ul>
+          <p style="margin-top:20px;"><strong>모델링 및 평가</strong></p>
+          <ul class="bullets">
+            <li>Random Forest(class_weight=balanced)와 XGBoost(scale_pos_weight로 불균형 보정) 두 모델을 동일 조건으로 학습·비교</li>
+            <li>Feature Importance뿐 아니라 <strong>F1 Score, AUC, Confusion Matrix, 불량 Recall/Precision</strong>까지 정량 평가</li>
+            <li>두 모델의 Top 15 Feature Importance를 비교해 공통으로 중요하게 나타난 변수를 별도로 확인</li>
+          </ul>
+          <div class="flowchart">
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">SECOM 데이터&#10;(1567×592)</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box dim">결측치 20%+&#10;컬럼 제거</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box">KNN Imputer&#10;(k=5)</div>
+            </div>
+            <div class="flowchart-arrow down">↓</div>
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">Random Forest</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box dim">F1 · AUC ·&#10;Confusion Matrix</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box highlight">LLM 자동 해석&#10;리포트</div>
+            </div>
+            <div class="flowchart-row">
+              <div class="flowchart-box dim">XGBoost</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-box dim">Feature&#10;Importance 비교</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="result">
+          <h2>결과</h2>
+          <p>모델별 정량 평가 (불량 클래스 기준):</p>
+          <table class="data-table">
+            <tr><th>모델</th><th>F1 Score</th><th>AUC</th><th>불량 Recall</th><th>불량 Precision</th></tr>
+            <tr><td>Random Forest</td><td>0.9654</td><td>0.6842</td><td>1.0000</td><td>0.9331</td></tr>
+            <tr><td class="highlight">XGBoost</td><td class="highlight">0.9652</td><td class="highlight">0.6933</td><td class="highlight">0.9932</td><td class="highlight">0.9387</td></tr>
+          </table>
+          <div class="figure">
+            <img src="../assets/images/secom2-confusion-matrix.png" alt="Random Forest와 XGBoost의 Confusion Matrix 비교">
+            <div class="figure-caption">Random Forest(좌) vs XGBoost(우) Confusion Matrix — 테스트셋 314건 (정상 21건, 불량 293건)</div>
+          </div>
+          <p>
+            F1 Score만 보면 두 모델이 비슷해 보이지만, <strong>Confusion Matrix를 보면 이야기가
+            달라집니다.</strong> Random Forest는 테스트셋의 정상(21건)을 <strong>단 한 건도
+            맞히지 못하고 전부 불량으로 예측</strong>했습니다 — 불량이 압도적 다수(293건)인
+            불균형 데이터에서 다수 클래스만 찍어도 F1·Recall이 높게 나오는 함정입니다. XGBoost는
+            21건 중 2건이나마 정상을 맞혀 상대적으로 더 균형 잡힌 예측을 보였고, AUC(0.693)도
+            더 높아 <strong>두 모델 중에서는 XGBoost가 실질적으로 더 나은 선택</strong>이었습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/secom2-feature-importance.png" alt="Random Forest와 XGBoost의 Feature Importance Top 15 비교">
+            <div class="figure-caption">Random Forest(좌) vs XGBoost(우) Feature Importance Top 15 — 두 모델 공통 상위 변수: 28, 59</div>
+          </div>
+          <p>
+            두 모델의 Top 15 변수 중 <strong>변수 28과 59가 공통으로 상위권</strong>에 올랐고,
+            특히 변수 59는 작년 Random Forest 단일 모델 분석에서도 1위였던 변수입니다. 59, 130,
+            33, 348은 작년 Top 5와 이번 Random Forest Top 5에 모두 포함되어, <strong>두 번의
+            독립적인 분석에서 일관되게 중요한 변수로 확인</strong>된 셈입니다.
+          </p>
+        </section>
+
+        <section id="discussion">
+          <h2>LLM 해석 리포트</h2>
+          <p>
+            분석 결과(성능 지표, Feature Importance)를 텍스트로 정리해 Gemini(LangChain
+            PromptTemplate)에 전달하면, 아래 4개 섹션으로 구성된 해석 리포트를 자동으로
+            작성하도록 파이프라인을 구성했습니다.
+          </p>
+          <ul class="bullets">
+            <li><strong>모델 성능 해석:</strong> 두 모델의 성능 차이를 불량 탐지 관점에서 해석</li>
+            <li><strong>핵심 Feature 분석:</strong> SECOM 변수명이 익명화(숫자)되어 있어, 일반적인 반도체 공정 센서(공정 조건·장비 상태·전후 공정 영향) 관점에서 의미를 추론</li>
+            <li><strong>수율 개선 제안 3가지:</strong> ① 변수 28·59에 대한 심층 분석 및 관리 한계 재검토 ② 모델 기반 실시간 수율 모니터링 시스템 구축 ③ 핵심 변수 간 상호작용 분석으로 공정 윈도우 최적화</li>
+            <li><strong>분석의 한계 4가지:</strong> ① 변수 익명화로 실제 공정 파라미터 매핑 불가 ② 불량 유형(Defect Type) 정보 부재 ③ 시점 스냅샷 데이터라 시계열 트렌드 미반영 ④ SHAP·LIME 같은 설명가능 AI(XAI) 기법 부재</li>
+          </ul>
+          <div class="callout">
+            <strong>참고:</strong> Gemini 무료 티어의 일일 요청 한도(20회) 제한으로 README 초안
+            자동 생성 단계는 429 오류로 중단되었습니다. 리포트 자체는 정상적으로 생성·저장되었고,
+            README는 직접 작성했습니다.
+          </div>
+        </section>
+
+        <section id="learning">
+          <h2>배운 점 & 한계</h2>
+          <ul class="bullets">
+            <li>F1 Score 하나만으로는 모델의 실제 예측 편향을 놓칠 수 있다는 것을 Random Forest의 Confusion Matrix에서 직접 확인했습니다 — 불균형 데이터일수록 클래스별 지표와 혼동행렬을 함께 봐야 한다는 점을 체감했습니다</li>
+            <li>class_weight='balanced'나 scale_pos_weight 같은 불균형 보정 옵션을 적용해도 실제로 소수 클래스를 얼마나 잘 잡아내는지는 반드시 별도로 검증해야 한다는 것을 배웠습니다</li>
+            <li>LLM에게 정량 결과를 그대로 던지는 것이 아니라, 원하는 리포트 구조(성능 해석 → Feature 분석 → 액션 아이템 → 한계)를 프롬프트에 명시해야 실무에 바로 쓸 수 있는 리포트가 나온다는 것을 확인했습니다</li>
+            <li>향후에는 SHAP 기반 설명가능 AI를 추가하고, Gemini API 유료 티어 또는 로컬 LLM으로 전환해 요청 한도 문제를 해결하고 싶습니다</li>
+          </ul>
+        </section>
+
+        <section id="files">
+          <h2>첨부 자료</h2>
+          <p>
+            <a href="https://github.com/haeunroh-skku/llm-yield-automation" target="_blank" rel="noopener" class="btn btn-ghost">GitHub Repository →</a>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="yield-analysis.html">← 이전 프로젝트: 반도체 수율 분석 (SECOM)</a>
+      <a href="wafer-defect.html">다음 프로젝트: 웨이퍼 결함 패턴 분류 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=3"></script>
+</body>
+</html>

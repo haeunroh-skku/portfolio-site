@@ -13,6 +13,7 @@ portfolio-site/
 ├── assets/docs/                   # 발표자료·보고서 원본 파일 (다운로드용)
 └── projects/
     ├── yield-analysis.html         # 반도체 수율 분석(SECOM) 상세
+    ├── llm-yield-automation.html   # LLM 기반 수율 예측 자동화 시스템 상세
     ├── dew-point.html              # 이슬점 예측 시뮬레이션 상세
     ├── myknowledgechatbot.html     # My Knowledge Chatbot 만들기 상세
     ├── virtual-metrology.html      # Virtual Metrology 연구 상세

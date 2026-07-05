@@ -48,6 +48,9 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   padding: 0 24px;
 }
+@media (max-width: 640px) {
+  .wrap { padding: 0 28px; }
+}
 
 section { padding: 72px 0; }
 @media (max-width: 640px) {
