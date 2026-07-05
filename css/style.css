@@ -530,6 +530,7 @@ footer {
   padding: 6px 0;
 }
 .toc a:hover { color: var(--accent-dark); }
+.toc a.active { color: var(--accent-dark); font-weight: 700; }
 @media (max-width: 800px) {
   .toc { position: static; top: auto; }
 }
