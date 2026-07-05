@@ -503,14 +503,19 @@ footer {
 }
 
 .detail-body {
-  padding: 64px 0;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 64px 24px;
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 56px;
   align-items: start;
 }
 @media (max-width: 800px) {
-  .detail-body { grid-template-columns: 1fr; gap: 24px; padding: 40px 0; }
+  .detail-body { grid-template-columns: 1fr; gap: 24px; padding: 40px 24px; }
+}
+@media (max-width: 640px) {
+  .detail-body { padding: 40px 28px; }
 }
 
 .toc {
