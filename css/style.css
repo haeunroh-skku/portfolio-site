@@ -506,23 +506,35 @@ footer {
   max-width: var(--maxw);
   margin: 0 auto;
   padding: 64px 24px;
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 40px;
-  align-items: start;
 }
 @media (max-width: 800px) {
-  .detail-body { grid-template-columns: 1fr; gap: 24px; padding: 40px 24px; }
+  .detail-body { padding: 40px 24px; }
 }
 @media (max-width: 640px) {
   .detail-body { padding: 40px 28px; }
 }
 
+.detail-content {
+  max-width: 760px;
+}
+
 .toc {
-  position: sticky;
-  top: 96px;
   display: grid;
   gap: 10px;
+}
+@media (min-width: 801px) {
+  .toc {
+    position: fixed;
+    top: 140px;
+    left: max(24px, calc(50% - (var(--maxw) / 2) + 24px));
+    width: 140px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    z-index: 5;
+  }
 }
 .toc a {
   font-size: 13.5px;
