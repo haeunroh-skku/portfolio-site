@@ -522,6 +522,9 @@ footer {
   padding: 6px 0;
 }
 .toc a:hover { color: var(--accent-dark); }
+@media (max-width: 800px) {
+  .toc { position: static; top: auto; }
+}
 
 .detail-content > section {
   padding: 0 0 48px;
