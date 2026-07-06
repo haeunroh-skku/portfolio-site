@@ -349,6 +349,7 @@ section .btn-ghost:hover { border-color: var(--accent-dark); color: var(--accent
 .project-grid.is-filtering .card { display: none; }
 
 .card {
+  position: relative;
   display: block;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -358,6 +359,29 @@ section .btn-ghost:hover { border-color: var(--accent-dark); color: var(--accent
   transition: opacity 0.15s ease;
 }
 .card:hover { opacity: 0.75; }
+.card.featured { border: 2px solid var(--accent-dark); }
+.featured-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-dark);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 100px;
+}
+.featured-badge::before {
+  content: "★";
+  font-size: 10px;
+}
 .card-thumb {
   aspect-ratio: 4 / 3;
   background: linear-gradient(160deg, var(--grad-1) 0%, var(--grad-2) 100%);
