@@ -32,7 +32,7 @@
       <div class="eyebrow">Research</div>
       <h1>웨이퍼 결함 패턴 분류 및 PHI 기반 설비 점검 우선순위 도출 시스템</h1>
       <p style="max-width:640px;">
-        화공인공지능 수업에서 진행한 프로젝트. 기획을 도맡아 웨이퍼 맵 결함 패턴을 CNN으로 분류하고, 결함 심각도(Severity)와 공정 건전성 지수(PHI)를 결합해 설비 점검 우선순위를 자동 도출하는
+        화공인공지능 수업에서 진행한 프로젝트. 기획을 도맡아 웨이퍼 맵 결함 패턴을 CNN으로 분류하고, 결함 심각도(Severity)와 Process 건전성 지수(PHI)를 결합해 설비 점검 우선순위를 자동 도출하는
         시스템을 설계했습니다.
       </p>
       <div class="detail-meta">
@@ -66,22 +66,22 @@
           <h2>개요</h2>
           <p>
             하루 수만 장 이상 생산되는 웨이퍼 맵을 육안으로 검사하는 것은 비효율적이고
-            병목을 유발합니다. 기존 연구는 단순 결함 분류(classification)에 그쳐 원인 공정
+            병목을 유발합니다. 기존 연구는 단순 결함 분류(classification)에 그쳐 원인 Process
             추정이나 점검 우선순위 판단으로 이어지지 못한다는 한계가 있었습니다. 이 프로젝트는
-            웨이퍼 맵 기반 불량 심각도 분석과 공정 점검 우선순위 도출까지 하나의 흐름으로
+            웨이퍼 맵 기반 불량 심각도 분석과 Process 점검 우선순위 도출까지 하나의 흐름으로
             구현하는 AI 시스템을 목표로 했습니다.
           </p>
           <div class="callout">
             <strong>파이프라인:</strong> CNN 분류 → 결함 심각도(R·C·Pe·Pc) 산출 → AHP 가중합
-            → PHI(공정 건전성 지수) → 설비 점검 Action Plan
+            → PHI(Process 건전성 지수) → 설비 점검 Action Plan
           </div>
         </section>
 
         <section id="problem">
           <h2>문제 정의</h2>
           <ul class="bullets">
-            <li>미세 공정 + 대량 생산 환경에서는 미세 결함도 전체 수율에 직결되지만, 결함 분류만으로는 "어떤 공정/설비를 먼저 점검해야 하는지" 판단할 수 없었음</li>
-            <li>화학공학적으로는 박막 증착·식각·확산·세정 등 단위공정과 결함 원인의 상관관계를 이해해야 하고, AI로는 대량 웨이퍼 맵에서 패턴을 자동 분류하고 이상 징후를 탐지해야 하는 두 축이 모두 필요했음</li>
+            <li>미세 Process + 대량 생산 환경에서는 미세 결함도 전체 수율에 직결되지만, 결함 분류만으로는 "어떤 Process/설비를 먼저 점검해야 하는지" 판단할 수 없었음</li>
+            <li>화학공학적으로는 박막 Deposition·Etch·Diffusion·Clean 등 단위 Process와 결함 원인의 상관관계를 이해해야 하고, AI로는 대량 웨이퍼 맵에서 패턴을 자동 분류하고 이상 징후를 탐지해야 하는 두 축이 모두 필요했음</li>
             <li>단일 분류 정확도만으로는 결함의 심각도(공간적 집중도, 위치 등)를 반영하지 못함</li>
           </ul>
         </section>
@@ -120,12 +120,12 @@
             때문입니다.
           </p>
 
-          <p style="margin-top:20px;"><strong>공정 건전성 지수(PHI)와 설비 점검 권고</strong></p>
+          <p style="margin-top:20px;"><strong>Process 건전성 지수(PHI)와 설비 점검 권고</strong></p>
           <ul class="bullets">
             <li>PHI 정의: E = 정상군 평균 대비 초과 심각도 (정상 조건에서는 E≈0 → PHI≈100%)</li>
             <li>SPC 고정 보정: HIGH 경계(μ+1.5σ)에서 PHI=50%가 되도록 보정 계수 α 고정 → MEDIUM 경계(μ+0.5σ)에서는 PHI≈79%로 MONITOR 임계값(80%)과 정합</li>
             <li>등급 체계: NORMAL(PHI≥80%, 조치 불필요) / MONITOR(50~80%, 예방정비) / URGENT(&lt;50%, 즉각 점검)</li>
-            <li>결함 패턴별 우선 점검 공정·설비 후보군을 EQUIPMENT_DB로 매핑하되, 단일 원인 확정이 아닌 decision-support 방식으로 제한</li>
+            <li>결함 패턴별 우선 점검 Process·설비 후보군을 EQUIPMENT_DB로 매핑하되, 단일 원인 확정이 아닌 decision-support 방식으로 제한</li>
           </ul>
         </section>
 
@@ -184,7 +184,7 @@
           <ul class="bullets">
             <li>지도학습 기반이라 학습 데이터에 없는 새로운·복합 패턴은 판단하기 어려워, 보조 지표로 해석할 필요가 있음</li>
             <li>WM-811K는 명확한 단일 패턴 중심 공개 데이터라 애매한 패턴·복합 결함이 적어 Scratch·Local의 F1이 상대적으로 낮았음 — 향후 data augmentation과 실제 fab 데이터 검증 필요</li>
-            <li>웨이퍼 맵만으로는 공정 history·장비 로그·레시피·metrology 데이터를 통합하지 못해, 단일 원인 확정이 아닌 decision-support 방식으로 제한됨</li>
+            <li>웨이퍼 맵만으로는 Process history·장비 로그·레시피·metrology 데이터를 통합하지 못해, 단일 원인 확정이 아닌 decision-support 방식으로 제한됨</li>
             <li>AHP 가중치는 문헌 기반의 합리적 가정이며 실측 최적값은 아니고, PHI는 절대 수율을 예측하지 못함 — 향후 실측 yield·장비 이력으로 재학습 필요</li>
             <li>향후 계획: 비지도/준지도 확장(클러스터링, one-class, autoencoder)으로 라벨 밖 새로운 패턴 탐지, multi-label 모델로 복합 패턴 대응, 장비 로그·레시피·lot 이력 통합, 실제 fab 데이터 기반 가중치 재추정</li>
           </ul>

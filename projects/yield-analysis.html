@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>반도체 공정 데이터 분석을 통한 수율 개선 프로젝트 (SECOM) — Haeun Roh</title>
+<title>반도체 Process 데이터 분석을 통한 수율 개선 프로젝트 (SECOM) — Haeun Roh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
@@ -30,9 +30,9 @@
     <div class="wrap">
       <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
       <div class="eyebrow">Data Analysis</div>
-      <h1>반도체 공정 데이터 분석을 통한 수율 개선 프로젝트 (SECOM)</h1>
+      <h1>반도체 Process 데이터 분석을 통한 수율 개선 프로젝트 (SECOM)</h1>
       <p style="max-width:640px;">
-        Kaggle의 실제 반도체 제조 공정(SECOM) 데이터에서 발생하는 수율 저하의 근본 원인을
+        Kaggle의 실제 반도체 제조 Process(SECOM) 데이터에서 발생하는 수율 저하의 근본 원인을
         찾기 위해 진행한 데이터 분석 프로젝트입니다.
       </p>
       <div class="detail-meta">
@@ -42,7 +42,7 @@
         <div><span>데이터</span><span>Kaggle SECOM (1,500개 이상 변수)</span></div>
       </div>
       <div class="detail-stats">
-        <div><span>1,500+</span><span>분석한 공정 변수</span></div>
+        <div><span>1,500+</span><span>분석한 Process 변수</span></div>
         <div><span>Top 5</span><span>도출한 핵심 불량 변수</span></div>
         <div><span>GitHub</span><span>코드·방법론 공개</span></div>
       </div>
@@ -66,11 +66,11 @@
           <h2>개요</h2>
           <p>
             반도체 기업에서 수율 엔지니어에게는 데이터 분석 역량이 필수적이라고
-            생각했습니다. Pandas와 머신러닝을 학습하는 데 그치지 않고, 실제 반도체 제조 공정
+            생각했습니다. Pandas와 머신러닝을 학습하는 데 그치지 않고, 실제 반도체 제조 Process
             데이터를 활용해 수율 저하의 원인을 분석하는 프로젝트를 진행했습니다.
           </p>
           <div class="callout">
-            <strong>문제 정의:</strong> Kaggle의 실제 반도체 제조 공정(SECOM) 데이터에서 발생하는
+            <strong>문제 정의:</strong> Kaggle의 실제 반도체 제조 Process(SECOM) 데이터에서 발생하는
             수율 저하의 근본 원인을 찾고자 했습니다.
           </div>
         </section>
@@ -78,9 +78,9 @@
         <section id="problem">
           <h2>문제 정의</h2>
           <ul class="bullets">
-            <li>1,500개 이상의 공정 변수 중 수율(Pass/Fail)에 실질적인 영향을 주는 변수를 특정해야 했음</li>
+            <li>1,500개 이상의 Process 변수 중 수율(Pass/Fail)에 실질적인 영향을 주는 변수를 특정해야 했음</li>
             <li>변수 다수에 결측치가 포함되어 있어 그대로 분석에 사용할 수 없었음</li>
-            <li>단순 상관관계만으로는 다변량 공정 데이터에서 핵심 원인을 짚어내기 어려웠음</li>
+            <li>단순 상관관계만으로는 다변량 Process 데이터에서 핵심 원인을 짚어내기 어려웠음</li>
           </ul>
         </section>
 
@@ -98,7 +98,7 @@
           </ul>
           <div class="figure">
             <img src="../assets/images/secom-feature-importance.png" alt="Feature Importance Top 5 차트">
-            <div class="figure-caption">Random Forest 기반 공정 변수 Feature Importance Top 5 (변수 ID: 59, 103, 348, 130, 33)</div>
+            <div class="figure-caption">Random Forest 기반 Process 변수 Feature Importance Top 5 (변수 ID: 59, 103, 348, 130, 33)</div>
           </div>
         </section>
 
@@ -106,7 +106,7 @@
           <h2>결과 및 기여</h2>
           <p>
             분석 결과, <strong>특정 'Sensor' 값이 수율 저하와 가장 높은 상관관계</strong>를
-            보임을 확인했습니다. 이를 바탕으로 해당 공정 변수의 관리 한계선(Control Limit)을
+            보임을 확인했습니다. 이를 바탕으로 해당 Process 변수의 관리 한계선(Control Limit)을
             강화하는 엔지니어링 솔루션을 제안했습니다.
           </p>
           <div class="callout">
@@ -118,17 +118,17 @@
         <section id="pitch">
           <h2>한 줄 소개</h2>
           <p style="font-style:italic;">
-            "제조 공정 데이터(SECOM)를 활용, Pandas 기반의 데이터 전처리 및 머신러닝(Random Forest)을
-            통해 수율 저하의 핵심 원인(공정 변수)을 규명하고 개선 방안을 도출한 프로젝트"
+            "제조 Process 데이터(SECOM)를 활용, Pandas 기반의 데이터 전처리 및 머신러닝(Random Forest)을
+            통해 수율 저하의 핵심 원인(Process 변수)을 규명하고 개선 방안을 도출한 프로젝트"
           </p>
         </section>
 
         <section id="learning">
           <h2>배운 점 & 향후 계획</h2>
           <ul class="bullets">
-            <li>결측치를 처리하고, 머신러닝 모델로 핵심 불량 원인을 특정하며, 공정 개선점을 도출하는 엔지니어의 문제 해결 전 과정을 경험함</li>
-            <li>단일 변수 상관관계가 아닌 모델 기반 변수 중요도로 접근해야 다변량 공정 데이터의 원인을 더 신뢰성 있게 짚어낼 수 있음을 체득</li>
-            <li>다음에는 XGBoost·LightGBM 등 다른 분류 모델과 성능을 비교하고, 도출한 핵심 변수를 실제 공정 관리도(SPC)와 연동해 실시간 이상 탐지로 확장해보고 싶습니다</li>
+            <li>결측치를 처리하고, 머신러닝 모델로 핵심 불량 원인을 특정하며, Process 개선점을 도출하는 엔지니어의 문제 해결 전 과정을 경험함</li>
+            <li>단일 변수 상관관계가 아닌 모델 기반 변수 중요도로 접근해야 다변량 Process 데이터의 원인을 더 신뢰성 있게 짚어낼 수 있음을 체득</li>
+            <li>다음에는 XGBoost·LightGBM 등 다른 분류 모델과 성능을 비교하고, 도출한 핵심 변수를 실제 Process 관리도(SPC)와 연동해 실시간 이상 탐지로 확장해보고 싶습니다</li>
           </ul>
         </section>
 
