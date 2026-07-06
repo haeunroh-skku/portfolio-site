@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&lt;수율 엔지니어의 하루&gt; 게임 개발 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css?v=18">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Simulation · Game</div>
+      <h1>&lt;수율 엔지니어의 하루&gt; 게임 개발</h1>
+      <p style="max-width:640px;">
+        "수율 엔지니어는 실제로 어떤 하루를 보낼까?"를 직접 플레이해서 느낄 수 있게 만들어보고 싶어서 시작한 브라우저 게임입니다. 스토리·밸런스·13종 이상의
+        미니게임·7가지 엔딩까지 기획과 디테일은 전부 직접 짰고, 코드 구현은
+        Claude(Claude Code)와 함께 페어 프로그래밍하듯 진행했습니다. 하나씩 뜯어보며 완성해가는 과정 자체가 정말 재밌었어요.
+      </p>
+      <p style="margin-top:20px;">
+        <a href="https://cool-gnome-e32ea2.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary">▶ 게임 플레이하기</a>
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2026.07 – 지속 업데이트 중</span></div>
+        <div><span>역할</span><span>개인 프로젝트 (기획·밸런싱 직접, 구현은 Claude Code와 협업)</span></div>
+        <div><span>스택</span><span>Vanilla JavaScript(ES6+), HTML5, CSS3, Canvas API, Web Audio API</span></div>
+        <div><span>구분</span><span>개인 사이드 프로젝트 · 브라우저 게임</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>14일</span><span>제한 시간 내 수율 회복 목표</span></div>
+        <div><span>13종+</span><span>실무형 분석 업무</span></div>
+        <div><span>7가지</span><span>엔딩 분기</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#gameplay">핵심 게임플레이</a>
+        <a href="#events">돌발 이벤트</a>
+        <a href="#approach">기술 구현</a>
+        <a href="#result">엔딩</a>
+        <a href="#learning">배운 점</a>
+        <a href="#files">첨부 자료</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            수율 엔지니어라는 직무가 채용 공고나 자기소개서만으로는 실제로 어떤 하루를 보내는지
+            와닿기 어렵다고 생각했습니다. 취업 준비생일 때 상상만으로 만들어보는 하루는 재밌을 것 같아 만들어보게 되었습니다. 데이터 분석·문제 해결·사람 사이의 트레이드오프까지,
+            수율 엔지니어의 의사결정 과정을 직접 플레이하며 체감할 수 있는 브라우저 게임을
+            기획했습니다. 게임 속 업무 하나하나, 등장인물 대사, 밸런스, 엔딩 조건은
+            직접 설계했고, 실제로 동작하는 코드로 옮기는 과정은 Claude Code의 도움을
+            받았습니다.
+          </p>
+          <div class="callout">
+            <strong>목표:</strong> 엔지니어가 현업에서 겪을 법한 일을 미니미하게 구성하여, 단서로
+            원인을 추론해야 풀리는 문제 설계를 통해 데이터 판단력을 요구하는 게임을 만드는 것
+          </div>
+          <div class="figure">
+            <img src="../assets/images/game-title-mascot.png?v=2" alt="게임 타이틀 마스코트와 대사창">
+            <div class="figure-caption">20초씩 마스코트가 랜덤 대사를 하나씩 던집니다. "아빠 기다리지 말고 먼저 자", "오늘 데이트할 수 있냐고? 나도 모르겠네..." 같은, 야근하는 엔지니어의 애환이 담긴 말들을 한번 담아봤어요 ㅎㅎ 처음 기획한대로 디자인은 귀엽고 아기자기한 타이쿤 게임 느낌을 유지했어요.</div>
+          </div>
+        </section>
+
+        <section id="gameplay">
+          <h2>핵심 게임플레이</h2>
+          <p>
+            화면은 <strong>듀얼 모니터 구조</strong>입니다. 왼쪽은 "팹 상황판" — 장비별 가동 현황,
+            DPMO, 수율 추이 그래프, 실시간 업무일지가 흘러가고, 오른쪽은 "분석 워크벤치" — 실제
+            업무를 처리하는 화면입니다. 하루에 업무 슬롯 2개, 처리하고 정산하면 다음 날로 넘어가는
+            턴제 구조로 14일 안에 수율 95% 이상을 만들어야 합니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/game-fab-dashboard.png" alt="팹 상황판 — 장비 가동 현황과 업무일지">
+            <div class="figure-caption">팹 상황판. 장비마다 DPMO와 상태가 실시간으로 뜨고, 밑에는 지금까지의 판단이 전부 기록되는 업무일지가 쌓입니다. "10:00 오진! PVD 증착기를 세웠지만 범인이 아니었습니다" 같은 제 흑역사도 여기 다 남아요.</div>
+          </div>
+          <p>13종 이상의 업무 중 제가 가장 공들인 몇 가지만 소개하면:</p>
+          <div class="figure-row">
+            <div class="figure">
+              <img src="../assets/images/game-wafer-map-task.png" alt="웨이퍼맵 패턴 분석 업무 화면">
+              <div class="figure-caption">웨이퍼맵 패턴 분석 — 정비 이력·공정 로그 단서를 같이 봐야 원인 설비를 짚어낼 수 있습니다. 패턴만 외워서 찍으면 틀려요. 대신 우상단에 '선배에게 물어보기' 버튼도 있는데, 조금 바빠보여도 가끔은 잘 알려주세요.</div>
+            </div>
+            <div class="figure">
+              <img src="../assets/images/game-sensor-correlation-task.png" alt="센서 데이터 상관관계 분석 업무 화면">
+              <div class="figure-caption">센서 데이터 피처 엔지니어링 — 상관계수 -0.99가 나와도 진짜 원인이 아닐 수 있습니다. "상관관계 ≠ 인과관계" 함정을 직접 설계해서 심어놨어요.</div>
+            </div>
+          </div>
+          <div class="figure-row">
+            <div class="figure">
+              <img src="../assets/images/game-lot-triage-task.png" alt="불량 로트 분류 업무 화면">
+              <div class="figure-caption">불량 로트 분류 — 5장의 웨이퍼를 정상/경미/폐기로 빠르게 골라내야 하는, 은근히 순발력이 필요한 업무입니다.</div>
+            </div>
+            <div class="figure">
+              <img src="../assets/images/game-recipe-tuning-task.png" alt="레시피 파라미터 튜닝 업무 화면">
+              <div class="figure-caption">레시피 파라미터 튜닝 — 두 슬라이더를 동시에 목표 구간(초록 영역)에 맞춰야 하는데, 하나 맞추면 하나가 빠져나가는 게 은근히 어렵습니다.</div>
+            </div>
+          </div>
+          <p>
+            여기에 <strong>4축 스탯 시스템</strong>(수율 · 멘탈 · 포인트 · 설비 친밀도)이 서로
+            얽혀 돌아갑니다. 멘탈을 깎아서 선배에게 조언을 구할 수도 있고, 포인트를 모아 VM(가상
+            계측) 모델을 업그레이드해서 분석 힌트의 정확도를 높일 수도 있어요.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/game-vm-upgrade.png" alt="VM 서버실 — 가상 계측 모델 업그레이드 화면">
+            <div class="figure-caption">VM 서버실. R²=0.30(감으로 승부)에서 시작해 Linear Regression → Random Forest → XGBoost 순으로 포인트를 써서 업그레이드하면 힌트 정확도가 올라갑니다.</div>
+          </div>
+        </section>
+
+        <section id="events">
+          <h2>돌발 이벤트</h2>
+          <p>
+            실제 현업처럼 상사·후배·동료가 메신저나 팝업으로 불쑥 끼어드는 서사형
+            이벤트를 잔뜩 넣었습니다. 대부분 모두를 만족시킬 수 없는 기회비용 딜레마라서, 고르고
+            나면 한 번씩 찜찜해집니다.
+          </p>
+          <div class="figure-row">
+            <div class="figure">
+              <img src="../assets/images/game-junior-message-event.png" alt="후배 J사원의 메신저 이벤트">
+              <div class="figure-caption">후배 J사원이 메신저로 "이거 식각 2호기 문제인 것 같아요!"라고 말 걸어옵니다. 믿고 승인할지, 내가 직접 다시 검토할지 고를 수 있습니다. 후배의 말을 들어줬는데 틀리면 또다른 이벤트도 있어요. </div>
+            </div>
+            <div class="figure">
+              <img src="../assets/images/game-production-protest-event.png" alt="생산관리팀의 항의 이벤트">
+              <div class="figure-caption">생산관리팀이 찾아와 "장비를 자꾸 세워서 생산량이 떨어졌다"고 항의합니다. 품질 기준을 지키다 마찰을 감수할지, VM 모델 고도화를 약속하며 불량을 눈감아줄지 — 부서 간 소통의 어려움을 상상하며 만들어본 이벤트입니다.</div>
+            </div>
+          </div>
+          <p>
+            이 외에도 탕비실에서 멘탈을 채우다 자리를 비웠다고 혼나거나, 밤새 골든 웨이퍼(수율
+            98%)를 지키려고 야근을 택하거나, 협력사 원자재 스캔들의 진짜 원인을 교체 이력에서
+            추론해내는 이벤트 등, 매 판마다 조금씩 다른 조합으로 등장합니다. 
+          </p>
+        </section>
+
+        <section id="approach">
+          <h2>기술 구현</h2>
+          <p>
+            프레임워크·번들러·빌드 도구 없이 <code>index.html</code>, <code>style.css</code>,
+            <code>game.js</code> 정적 파일 3개만으로 구동되도록 만들었습니다. GitHub
+            Pages·Netlify·itch.io 등 어떤 정적 호스팅에도 그대로 배포할 수 있습니다. 기획한
+            시스템을 실제 코드로 옮기는 단계에서 Claude Code와 함께 구조를 잡았습니다.
+          </p>
+          <ul class="bullets">
+            <li><strong>Canvas API:</strong> 웨이퍼맵 절차적 렌더링, 수율 추이 차트, 엔딩 결과 카드 이미지를 전부 코드로 직접 생성</li>
+            <li><strong>Web Audio API:</strong> 외부 음원 파일 없이 오실레이터로 타이핑음·전화벨 등 사운드를 직접 합성</li>
+            <li><strong>localStorage:</strong> 서버 없이 브라우저 저장만으로 "이어하기" 구현</li>
+          </ul>
+          <div class="callout">
+            <strong>단일 진입점 상태관리:</strong> 모든 스탯 변화를 <code>applyStatDelta()</code>
+            하나로만 처리하고, 클로저 변수(<code>lastYieldBefore</code>/<code>lastMentalBefore</code>)로
+            "직전값 → 변경값"을 자동으로 로그에 기록하도록 설계했습니다. 호출부 수십 곳을 일일이
+            고치지 않고도 전역 규칙 하나로 일관성을 유지할 수 있었습니다.
+          </div>
+          <p>
+            여러 이벤트가 동시에 발생해도 <code>pendingLogModals</code> 큐 +
+            <code>flushLogModals(continuation)</code> 패턴으로 하나씩 순서대로 모달을 띄워,
+            프레임워크 없이도 턴제 게임의 이벤트 순서를 안정적으로 제어했습니다. 상관관계 분석
+            업무는 가짜 수치 대신 40행 합성 데이터셋 + 결측치 주입 + 직접 구현한 피어슨
+            상관계수 계산 함수로 "정제 → 계산" 파이프라인을 그대로 재현했고, 근본 원인 변수와
+            그로부터 파생되는 다운스트림 변수를 실제 인과관계로 설계해 상관관계≠인과관계 함정을
+            학습시키는 구조로 만들었습니다.
+          </p>
+          <p>
+            웨이퍼맵 유형이 과도하게 반복 출제되던 문제는 1만 회 몬테카를로 시뮬레이션으로
+            검증하여, 콜백 메커니즘의 확률적 중첩이 원인임을 정량적으로 찾아내 확률을 재조정했습니다.
+            고정된 "패턴 → 설비" 매핑도 없애고, 설비 "그룹 + 정비 이력/공정 로그 단서" 생성
+            로직으로 바꿔 매회 다른 근거로 추론해야만 풀리도록 재설계했습니다. 
+          </p>
+          <div class="figure">
+            <img src="../assets/images/game-work-log.png" alt="업무일지 — 판단마다 쌓이는 수율·멘탈 변화 로그">
+            <div class="figure-caption">업무일지. 잘 풀리는 날은 "모든 로트를 정확히 분류했습니다! (수율 89% → 97%)"처럼 뿌듯하고, 안 풀리는 날은 "멘탈이 완전히 바닥났습니다..."처럼 그대로 무너집니다.</div>
+          </div>
+        </section>
+
+        <section id="result">
+          <h2>엔딩</h2>
+          <p>
+            최종 수율·멘탈·설비 친밀도 조합에 따라 7가지 엔딩(기술 명장 / 고독한 천재 / 데이터
+            마사지사 / 번아웃 등)으로 갈립니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/game-ending-d-grade.png" alt="D등급 엔딩 화면 — 자연으로의 회귀">
+            <div class="figure-caption">"자연으로의 회귀" — 멘탈이 완전히 바닥나 사표를 던지고 고구마 농사를 짓는 엔딩입니다. "흙은 센서 노이즈가 없어서 참 좋군.."이라는 대사가 제일 마음에 들어요. 또 어떤 결말이 있을까요? 궁금하면 직접 플레이해보세요 ㅎㅎ</div>
+          </div>
+        </section>
+
+        <section id="learning">
+          <h2>배운 점</h2>
+          <ul class="bullets">
+            <li>콘텐츠 양을 늘리는 것보다, "그럴싸해 보이지만 사실 패턴 암기"인 문제를 "매번 다른 근거로 추론"하게 바꾸는 설계가 훨씬 어렵고 중요하다는 것을 느꼈습니다</li>
+            <li>프레임워크 없이도 "상태-렌더 분리 + 단일 진입점 상태변경 + 이벤트 큐"라는 원칙만 지키면 순수 DOM 조작으로도 복잡한 시뮬레이션 게임의 상태 일관성을 유지할 수 있다는 것을 Claude Code와 함께 구조를 짜보며 확인했습니다</li>
+            <li>이미지·오디오 파일 없이 Canvas·Web Audio API만으로도 충분히 몰입감 있는 연출이 가능하다는 것을 배웠습니다</li>
+          </ul>
+        </section>
+
+        <section id="files">
+          <h2>첨부 자료</h2>
+          <p>
+            <a href="https://cool-gnome-e32ea2.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary">▶ 게임 플레이하기</a>
+            <a href="https://github.com/haeunroh-skku/yield-engineer-game" target="_blank" rel="noopener" class="btn btn-ghost">GitHub Repository →</a>
+          </p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="biochem-seminar.html">← 이전 프로젝트: CHEMIC 세미나</a>
+      <a href="../projects.html">프로젝트 목록으로 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=4"></script>
+</body>
+</html>

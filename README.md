@@ -19,7 +19,8 @@ portfolio-site/
     ├── virtual-metrology.html      # Virtual Metrology 연구 상세
     ├── wafer-defect.html           # 웨이퍼 결함 패턴 분류 시스템 상세
     ├── biochem-seminar.html        # CHEMIC 세미나(PEGylation) 상세
-    └── battery-urp.html            # 배터리 분리막 URP 상세
+    ├── battery-urp.html            # 배터리 분리막 URP 상세
+    └── yield-engineer-game.html    # 수율 엔지니어의 하루 (브라우저 게임) 상세
 ```
 
 메뉴는 "ABOUT"(index.html)과 "PROJECT"(projects.html) 두 개입니다. 헤더는 필기체 로고
