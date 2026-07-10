@@ -146,6 +146,14 @@
             21건 중 2건이나마 정상을 맞혀 상대적으로 더 균형 잡힌 예측을 보였고, AUC(0.693)도
             더 높아 <strong>두 모델 중에서는 XGBoost가 더 나은 선택</strong>이었습니다.
           </p>
+          <div class="callout">
+            <strong>참고:</strong> Kaggle 원본 SECOM 데이터셋 특성상 이번 테스트셋은 불량(293건)이
+            정상(21건)보다 압도적으로 많은데, 실제 팹에서는 정반대로 정상이 압도적 다수이고 불량이
+            극소수인 불균형을 가집니다. 다만 이 프로젝트에서 검증하려던 본질(압도적인 데이터
+            불균형 상황에서 모델이 다수 클래스로 편향되는 현상과 이를 XGBoost의
+            <code>scale_pos_weight</code> 같은 옵션으로 보정하는 메커니즘)은 불균형의 방향이
+            바뀌어도 동일하게 성립하기 때문에, 모델 검증 파이프라인을 체계화하는 데 집중했습니다.
+          </div>
           <div class="figure">
             <img src="../assets/images/secom2-feature-importance.png" alt="Random Forest와 XGBoost의 Feature Importance Top 15 비교">
             <div class="figure-caption">Random Forest(좌) vs XGBoost(우) Feature Importance Top 15 — 두 모델 공통 상위 변수: 28, 59</div>
