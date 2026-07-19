@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<link rel="stylesheet" href="../css/style.css?v=18">
+<link rel="stylesheet" href="../css/style.css?v=26">
 </head>
 <body>
 
@@ -56,6 +56,7 @@
         <a href="#problem">문제 정의</a>
         <a href="#approach">접근 방법</a>
         <a href="#result">결과</a>
+        <a href="#followup">후속 개인 탐구</a>
         <a href="#limitation">한계 및 향후 계획</a>
         <a href="#files">첨부 자료</a>
       </nav>
@@ -179,6 +180,102 @@
           </div>
         </section>
 
+        <section id="followup">
+          <h2>후속 개인 탐구: Pattern Simulator 제작</h2>
+          <p style="font-family:var(--mono); font-size:12.5px; color:var(--text-faint); margin-bottom:16px;">2026.07 · 2026 여름방학 중 개인 진행</p>
+          <p>
+            팀 프로젝트를 마친 뒤 Scratch와 Local, Edge-Ring과 Edge-Local이
+            헷갈리는 지점이 마음에 걸렸고, 각 패턴이 어떤 조건에서 어떤 모양으로 만들어지는지는 논문 속
+            정적 이미지 몇 장만으로 감이 잘 안 왔습니다. 그래서 방학 때 시간을 내서 노이즈·스크래치
+            길이·Ring 반경·Zone 강도를 직접 움직여보면서 웨이퍼 맵이 어떻게 변하는지 볼 수
+            있는 시뮬레이터를 직접 만들어봤습니다. 밑에서 패턴 유형을 선택하고 슬라이더를 직접 움직여 wafer defect을 볼 수 있고, 웨이퍼 지점마다 커서를 갖다 대면 상세한 다이 정보도 확인할 수 있습니다!
+          </p>
+          <div class="callout">
+            <strong>참고:</strong> 이 시뮬레이터는 위 CNN이 학습한 실제 웨이퍼 데이터가
+            아니라, 제가 정한 규칙(Ring은 반경 band, Zone은 특정 각도 sector, Scratch는
+            점-선분 거리, Random은 균일 노이즈)으로 패턴을 생성하는 도구입니다. 패턴이 왜 헷갈리는지를 시각화로 이해할 수 있었습니다.
+          </div>
+          <div class="wafer-sim">
+            <div class="ws-layout">
+              <div class="ws-controls-col">
+                <div class="ws-control">
+                  <div class="ws-control-label"><span>패턴 유형</span></div>
+                  <div class="ws-toggle ws-toggle-wrap">
+                    <button type="button" class="ws-toggle-btn active" id="ws-btn-ring">Ring</button>
+                    <button type="button" class="ws-toggle-btn" id="ws-btn-scratch">Scratch</button>
+                    <button type="button" class="ws-toggle-btn" id="ws-btn-zone">Zone</button>
+                    <button type="button" class="ws-toggle-btn active" id="ws-btn-random">Random</button>
+                  </div>
+                </div>
+                <div class="ws-control">
+                  <div class="ws-control-label"><span>노이즈 레벨</span><span class="ws-value" id="ws-noiseLabel">12%</span></div>
+                  <input type="range" id="ws-noise" min="0" max="100" value="12">
+                </div>
+                <div class="ws-control">
+                  <div class="ws-control-label"><span>스크래치 길이</span><span class="ws-value" id="ws-scratchLabel">35%</span></div>
+                  <input type="range" id="ws-scratch" min="0" max="100" value="35">
+                </div>
+                <div class="ws-control">
+                  <div class="ws-control-label"><span>Ring 반경</span><span class="ws-value" id="ws-ringLabel">68%</span></div>
+                  <input type="range" id="ws-ring" min="0" max="100" value="68">
+                </div>
+                <div class="ws-control">
+                  <div class="ws-control-label"><span>Zone 강도</span><span class="ws-value" id="ws-zoneLabel">30%</span></div>
+                  <input type="range" id="ws-zone" min="0" max="100" value="30">
+                </div>
+                <button type="button" class="ws-regen-btn" id="ws-regen">패턴 재생성 (Reseed)</button>
+                <div class="ws-legend">
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:var(--bg-alt); border:1px solid var(--border);"></span>정상</div>
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:#4d7ea8;"></span>Ring</div>
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:#b3486b;"></span>Scratch</div>
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:#c0954a;"></span>Zone</div>
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:#7a6bb3;"></span>Random</div>
+                  <div class="ws-legend-item"><span class="ws-swatch" style="background:#3a3a3a;"></span>Mixed (복합 원인)</div>
+                </div>
+              </div>
+
+              <div class="ws-map-col">
+                <div class="ws-map-frame">
+                  <svg viewBox="0 0 640 640" class="ws-svg" id="ws-svg">
+                    <circle cx="320" cy="320" r="302" fill="none" stroke="var(--border)" stroke-width="2"></circle>
+                    <path d="M 306 617 L 320 638 L 334 617" fill="none" stroke="var(--text-faint)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <g id="ws-dies"></g>
+                    <circle id="ws-hover-overlay" r="70" fill="#b5502e" opacity="0" style="pointer-events:none;"></circle>
+                  </svg>
+                  <div class="ws-tooltip" id="ws-tooltip" style="display:none;"></div>
+                </div>
+                <div class="ws-map-hint">다이를 클릭하면 상세 정보가 표시됩니다 · 호버 시 국소 불량 밀도 확인</div>
+              </div>
+
+              <div class="ws-info-col">
+                <div class="ws-yield-row">
+                  <svg class="ws-donut" viewBox="0 0 96 96">
+                    <circle cx="48" cy="48" r="42" fill="none" stroke="var(--border)" stroke-width="9"></circle>
+                    <circle id="ws-donut-arc" cx="48" cy="48" r="42" fill="none" stroke="var(--accent-dark)" stroke-width="9" stroke-linecap="round" transform="rotate(-90 48 48)"></circle>
+                    <text id="ws-donut-label" x="48" y="53" text-anchor="middle" style="font-size:15px; font-weight:700;">100%</text>
+                  </svg>
+                  <div>
+                    <div class="ws-info-label">YIELD</div>
+                    <div class="ws-info-line">불량 다이: <strong id="ws-defectCount">0</strong> / <span id="ws-totalCount">0</span></div>
+                    <div class="ws-info-line">클러스터 수: <strong id="ws-clusterCount">0</strong></div>
+                    <div class="ws-info-line">복합 불량률: <strong id="ws-mixedRatio">0%</strong></div>
+                  </div>
+                </div>
+                <div class="ws-direction">
+                  <div class="ws-info-label">불량 방향성</div>
+                  <div class="ws-direction-label" id="ws-direction">균일 (Uniform)</div>
+                  <div class="ws-direction-bar"><div class="ws-direction-marker" id="ws-directionMarker"></div></div>
+                  <div class="ws-direction-scale"><span>중심</span><span>엣지</span></div>
+                </div>
+                <div class="ws-detail">
+                  <div class="ws-info-label">다이 상세 정보</div>
+                  <div id="ws-detailBody" class="ws-detail-empty">선택된 다이가 없습니다. 웨이퍼 맵에서 다이를 클릭하세요.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="limitation">
           <h2>한계 및 향후 계획</h2>
           <ul class="bullets">
@@ -223,5 +320,254 @@
 
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="../js/main.js?v=4"></script>
+<script>
+(function () {
+  const root = document.querySelector('.wafer-sim');
+  if (!root) return;
+
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const N = 31, PAD = 20, CELL = 600 / N;
+  const centerPx = PAD + ((N - 1) * CELL) / 2 + CELL / 2;
+
+  const state = {
+    seed: 1,
+    noise: 12,
+    scratch: 35,
+    ring: 68,
+    zone: 30,
+    patterns: { ring: true, scratch: false, zone: false, random: true },
+    selected: null,
+    hover: null
+  };
+
+  function hash(x, y, s) {
+    let h = (x * 374761393 + y * 668265263 + s * 982451653) | 0;
+    h = (h ^ (h >>> 13)) * 1274126177;
+    h = h ^ (h >>> 16);
+    return ((h >>> 0) % 100000) / 100000;
+  }
+
+  function pointSegDist(px, py, ax, ay, bx, by) {
+    const abx = bx - ax, aby = by - ay;
+    const apx = px - ax, apy = py - ay;
+    const ab2 = abx * abx + aby * aby;
+    let t = ab2 > 0 ? (apx * abx + apy * aby) / ab2 : 0;
+    t = Math.max(0, Math.min(1, t));
+    const cxp = ax + t * abx, cyp = ay + t * aby;
+    return Math.sqrt((px - cxp) ** 2 + (py - cyp) ** 2);
+  }
+
+  function generateDies() {
+    const { seed, noise, scratch, ring, zone, patterns } = state;
+    const startR = 0.15 + hash(1, 1, seed * 10 + 2) * 0.5;
+    const startTheta = hash(2, 2, seed * 10 + 3) * Math.PI * 2;
+    const sx = startR * Math.cos(startTheta), sy = startR * Math.sin(startTheta);
+    const dirAngle = hash(3, 3, seed * 10 + 4) * Math.PI * 2;
+    const L = (scratch / 100) * 1.6;
+    const ex = sx + L * Math.cos(dirAngle), ey = sy + L * Math.sin(dirAngle);
+
+    const dies = [];
+    for (let row = 0; row < N; row++) {
+      for (let col = 0; col < N; col++) {
+        const px = PAD + col * CELL + CELL / 2;
+        const py = PAD + row * CELL + CELL / 2;
+        const dx = px - centerPx, dy = py - centerPx;
+        const distPx = Math.sqrt(dx * dx + dy * dy);
+        const r = distPx / 300;
+        if (r > 1.06) continue;
+        const theta = Math.atan2(dy, dx);
+        const nx = dx / 300, ny = dy / 300;
+        const causes = [];
+        if (patterns.ring) {
+          const band = ring / 100;
+          if (Math.abs(r - band) < 0.07 && hash(row, col, seed * 10 + 1) < 0.85) causes.push('Ring');
+        }
+        if (patterns.zone) {
+          const inSector = Math.abs(theta) < Math.PI / 4;
+          if (inSector && r > 0.35 && hash(row, col, seed * 10 + 4) < (zone / 100 * 0.85)) causes.push('Zone');
+        }
+        if (patterns.random) {
+          if (hash(row, col, seed * 10 + 5) < (noise / 100 * 0.5)) causes.push('Random');
+        }
+        if (patterns.scratch) {
+          const d = pointSegDist(nx, ny, sx, sy, ex, ey);
+          if (d < 0.045) causes.push('Scratch');
+        }
+        dies.push({ row, col, px, py, r, theta, defect: causes.length > 0, causes });
+      }
+    }
+    return dies;
+  }
+
+  function findClusters(dies) {
+    const map = new Map();
+    dies.forEach(d => map.set(d.row + '_' + d.col, d));
+    const visited = new Set();
+    let clusters = 0;
+    dies.forEach(d => {
+      const key = d.row + '_' + d.col;
+      if (!d.defect || visited.has(key)) return;
+      clusters++;
+      const stack = [d];
+      while (stack.length) {
+        const cur = stack.pop();
+        const ck = cur.row + '_' + cur.col;
+        if (visited.has(ck)) continue;
+        visited.add(ck);
+        [[cur.row - 1, cur.col], [cur.row + 1, cur.col], [cur.row, cur.col - 1], [cur.row, cur.col + 1]].forEach(([nr, nc]) => {
+          const nd = map.get(nr + '_' + nc);
+          if (nd && nd.defect && !visited.has(nr + '_' + nc)) stack.push(nd);
+        });
+      }
+    });
+    return clusters;
+  }
+
+  function computeMetrics(dies) {
+    const total = dies.length;
+    const defectDies = dies.filter(d => d.defect);
+    const defectCount = defectDies.length;
+    const mixedCount = dies.filter(d => d.causes.length > 1).length;
+    const mixedRatio = total ? (mixedCount / total) * 100 : 0;
+    const yieldPct = total ? (1 - defectCount / total) * 100 : 100;
+    const avgR = defectCount ? defectDies.reduce((a, d) => a + d.r, 0) / defectCount : 0;
+    let direction = '균일 (Uniform)';
+    if (defectCount > 0) {
+      if (avgR > 0.55) direction = '엣지 집중 (Edge-heavy)';
+      else if (avgR < 0.4) direction = '중심 집중 (Center-heavy)';
+    }
+    return { total, defectCount, yieldPct, avgR, direction, clusters: findClusters(dies), mixedCount, mixedRatio };
+  }
+
+  function localDensity(dies, row, col, radius) {
+    const nearby = dies.filter(d => Math.abs(d.row - row) <= radius && Math.abs(d.col - col) <= radius);
+    const defect = nearby.filter(d => d.defect).length;
+    return nearby.length ? Math.round((defect / nearby.length) * 100) : 0;
+  }
+
+  const causeColor = { Ring: '#4d7ea8', Scratch: '#b3486b', Zone: '#c0954a', Random: '#7a6bb3' };
+  function dieFill(d) {
+    if (!d.defect) return 'var(--bg-alt)';
+    if (d.causes.length > 1) return '#3a3a3a';
+    return causeColor[d.causes[0]] || '#7a6bb3';
+  }
+
+  const el = id => document.getElementById(id);
+  const svg = el('ws-svg');
+  const diesGroup = el('ws-dies');
+  const hoverOverlay = el('ws-hover-overlay');
+  const tooltip = el('ws-tooltip');
+  const dieSize = CELL * 0.82;
+  let currentDies = [];
+
+  function render() {
+    currentDies = generateDies();
+    const metrics = computeMetrics(currentDies);
+
+    diesGroup.innerHTML = '';
+    currentDies.forEach(d => {
+      const rect = document.createElementNS(SVGNS, 'rect');
+      rect.setAttribute('x', d.px - dieSize / 2);
+      rect.setAttribute('y', d.py - dieSize / 2);
+      rect.setAttribute('width', dieSize);
+      rect.setAttribute('height', dieSize);
+      rect.setAttribute('rx', 2);
+      rect.setAttribute('fill', dieFill(d));
+      const isSel = state.selected && state.selected.row === d.row && state.selected.col === d.col;
+      rect.setAttribute('stroke', isSel ? '#4d7ea8' : 'transparent');
+      rect.setAttribute('stroke-width', isSel ? 2.5 : 0);
+      rect.style.cursor = 'pointer';
+      rect.addEventListener('click', () => { state.selected = { row: d.row, col: d.col }; render(); });
+      rect.addEventListener('mouseenter', () => showHover(d));
+      diesGroup.appendChild(rect);
+    });
+
+    el('ws-totalCount').textContent = metrics.total;
+    el('ws-defectCount').textContent = metrics.defectCount;
+    el('ws-clusterCount').textContent = metrics.clusters;
+    el('ws-mixedRatio').textContent = metrics.mixedRatio.toFixed(1) + '%';
+    el('ws-direction').textContent = metrics.direction;
+    el('ws-directionMarker').style.left = (Math.min(1, metrics.avgR) * 100) + '%';
+
+    const circumference = 2 * Math.PI * 42;
+    const dash = (metrics.yieldPct / 100) * circumference;
+    const arc = el('ws-donut-arc');
+    arc.setAttribute('stroke-dasharray', `${dash} ${circumference}`);
+    arc.setAttribute('stroke', metrics.yieldPct >= 90 ? 'var(--accent-dark)' : metrics.yieldPct >= 70 ? '#c0954a' : '#b3486b');
+    el('ws-donut-label').textContent = metrics.yieldPct.toFixed(1) + '%';
+
+    renderDetail();
+  }
+
+  function showHover(d) {
+    hoverOverlay.setAttribute('cx', d.px);
+    hoverOverlay.setAttribute('cy', d.py);
+    hoverOverlay.setAttribute('opacity', 0.28);
+    const density = localDensity(currentDies, d.row, d.col, 2);
+    const frame = svg.parentElement;
+    const svgRect = svg.getBoundingClientRect();
+    const frameRect = frame.getBoundingClientRect();
+    const scale = svgRect.width / 640;
+    tooltip.style.display = 'block';
+    tooltip.style.left = ((d.px * scale) + (svgRect.left - frameRect.left)) + 'px';
+    tooltip.style.top = ((d.py * scale) + (svgRect.top - frameRect.top)) + 'px';
+    tooltip.innerHTML = `Row ${d.row} · Col ${d.col}<br>불량밀도: ${density}%`;
+  }
+  svg.addEventListener('mouseleave', () => {
+    hoverOverlay.setAttribute('opacity', 0);
+    tooltip.style.display = 'none';
+  });
+
+  function renderDetail() {
+    const body = el('ws-detailBody');
+    if (!state.selected) {
+      body.className = 'ws-detail-empty';
+      body.textContent = '선택된 다이가 없습니다. 웨이퍼 맵에서 다이를 클릭하세요.';
+      return;
+    }
+    const d = currentDies.find(x => x.row === state.selected.row && x.col === state.selected.col);
+    if (!d) return;
+    const statusStr = d.causes.length > 1 ? '복합 불량 (Mixed)' : d.defect ? '불량 (Fail)' : '정상 (Pass)';
+    body.className = 'ws-detail-body';
+    body.innerHTML = `
+      <div>Row ${d.row} · Col ${d.col}</div>
+      <div>반경위치 r: ${d.r.toFixed(3)}</div>
+      <div>각도 θ: ${(d.theta * 180 / Math.PI).toFixed(1)}°</div>
+      <div>상태: ${statusStr}</div>
+      <div>원인: ${d.causes.length ? d.causes.join(', ') : '-'}</div>
+      <button type="button" class="ws-detail-close" id="ws-detail-close-btn">닫기</button>
+    `;
+    el('ws-detail-close-btn').addEventListener('click', () => { state.selected = null; render(); });
+  }
+
+  function bindToggle(id, key) {
+    el(id).addEventListener('click', () => {
+      state.patterns[key] = !state.patterns[key];
+      el(id).classList.toggle('active', state.patterns[key]);
+      render();
+    });
+  }
+  bindToggle('ws-btn-ring', 'ring');
+  bindToggle('ws-btn-scratch', 'scratch');
+  bindToggle('ws-btn-zone', 'zone');
+  bindToggle('ws-btn-random', 'random');
+
+  function bindSlider(sliderId, labelId, stateKey) {
+    el(sliderId).addEventListener('input', e => {
+      state[stateKey] = Number(e.target.value);
+      el(labelId).textContent = state[stateKey] + '%';
+      render();
+    });
+  }
+  bindSlider('ws-noise', 'ws-noiseLabel', 'noise');
+  bindSlider('ws-scratch', 'ws-scratchLabel', 'scratch');
+  bindSlider('ws-ring', 'ws-ringLabel', 'ring');
+  bindSlider('ws-zone', 'ws-zoneLabel', 'zone');
+
+  el('ws-regen').addEventListener('click', () => { state.seed += 1; render(); });
+
+  render();
+})();
+</script>
 </body>
 </html>

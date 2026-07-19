@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<link rel="stylesheet" href="../css/style.css?v=18">
+<link rel="stylesheet" href="../css/style.css?v=26">
 </head>
 <body>
 
@@ -57,6 +57,7 @@
         <a href="#approach">접근 방법</a>
         <a href="#result">결과</a>
         <a href="#discussion">고찰</a>
+        <a href="#followup">후속 개인 탐구</a>
         <a href="#learning">배운 점</a>
         <a href="#files">첨부 자료</a>
       </nav>
@@ -190,6 +191,39 @@
           </div>
         </section>
 
+        <section id="followup">
+          <h2>후속 개인 탐구: 모델 비교·반응성 시각화</h2>
+          <p style="font-family:var(--mono); font-size:12.5px; color:var(--text-faint); margin-bottom:16px;">2026.07 · URP 발표 이후 개인 진행</p>
+          <p>
+            연구 결과를 시각화로 나타내려는 시도를 해보았습니다. 다음은 각 모델이 실제로 어떤 변수를 골랐는지 클릭해서 펼쳐볼 수 있는 비교 차트입니다. 막대를 클릭해보세요.
+          </p>
+          <div class="vm-compare" id="vmc-root">
+            <div class="vmc-bars" id="vmc-bars"></div>
+            <div class="vmc-detail" id="vmc-detail" style="display:none;"></div>
+          </div>
+
+          <p style="margin-top:36px;">
+            연구를 통해 확인한 건 "nF가 세질수록, nO(777nm)가 세질수록 Etch Rate가 오르고
+            nO(700nm)이 세질수록 내려간다"는 방향성이었습니다. 이 관계를 슬라이더로 직접
+            움직이면서 느껴보고자 아래 도구도 만들어봤습니다.
+          </p>
+          <div class="callout">
+            <strong>참고:</strong> 아래는 Hybrid 모델이 실제로 학습한 회귀 계수를 그대로 쓴 게
+            아닌, 연구에서 확인한 각 변수의 방향성(nF·nO777은 촉진, nO700은 억제)만 반영해
+            만든 도구입니다. 구체적인 Etch Rate 수치를 예측하는 도구가 아니라
+            '어느 성분이 우세할 때 어떤 경향이 나타나는지'를 정성적으로 보여주는 용도로만
+            봐주세요!
+          </div>
+          <div class="vm-sim" id="vms-root">
+            <div class="vms-sliders" id="vms-sliders"></div>
+            <div class="vms-result">
+              <div class="vms-result-label">현재 반응 상태</div>
+              <div class="vms-result-text" id="vms-interpretation"></div>
+              <div class="vms-mechanism">SiO<sub>2</sub>(s) + 4F(g) → SiF<sub>4</sub>(g)↑ + O<sub>2</sub>(g)</div>
+            </div>
+          </div>
+        </section>
+
         <section id="learning">
           <h2>배운 점</h2>
           <ul class="bullets">
@@ -236,5 +270,110 @@
 
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="../js/main.js?v=4"></script>
+<script>
+(function () {
+  // Part A: model comparison bar chart
+  const MODELS = [
+    { key: 'pearson', name: 'Pearson', r2: 0.7846, vars: ['nCF2', 'nCF', 'nF', 'ne', 'nO'],
+      note: '변수 간 1:1 선형 상관성만으로 골랐을 때 나오는 조합입니다. OES 화학 변수에 크게 편중됩니다.' },
+    { key: 'svs', name: 'SVS', r2: 0.6953, vars: ['nCF2', 'nCO644', 'nCF', 'nO', 'nCO645'],
+      note: '전체 데이터셋 기준 단계적 선택 결과이며, 변수 간 종속성 때문에 오히려 세 모델 중 가장 낮은 성능을 보였습니다.' },
+    { key: 'pca', name: 'PCA', r2: 0.8246, vars: ['PC10', 'PC8', 'PC9', 'PC6', 'PC4'],
+      note: 'OES+VI를 함께 주성분으로 압축한 결과입니다. 개별 변수의 화학적 의미는 해석하기 어렵습니다.' },
+    { key: 'hybrid', name: 'Hybrid', r2: 0.8806, vars: ['nF', 'nO(777nm)', 'nO(700nm)', 'ne', 'PC4–PC15'],
+      note: '지배적 OES 라디칼 변수를 먼저 고정하고, 저분산 주성분(PC4~PC15)으로 미세한 VI 신호를 보완해 최종 채택한 모델입니다.' },
+  ];
+  const rMin = 0.6, rMax = 0.95;
+  const barsEl = document.getElementById('vmc-bars');
+  const detailEl = document.getElementById('vmc-detail');
+
+  if (barsEl) {
+    MODELS.forEach((m, i) => {
+      const isHybrid = m.key === 'hybrid';
+      const pct = Math.max(6, ((m.r2 - rMin) / (rMax - rMin)) * 100);
+      const col = document.createElement('div');
+      col.className = 'vmc-bar-col';
+      col.innerHTML = `
+        <div class="vmc-bar-r2 ${isHybrid ? 'is-hybrid' : ''}">${m.r2.toFixed(4)}</div>
+        <div class="vmc-bar-fill ${isHybrid ? 'is-hybrid' : ''}" style="height:${pct}%"></div>
+        <div class="vmc-bar-name">${m.name}</div>
+        ${isHybrid ? '<div class="vmc-bar-badge">채택 모델</div>' : ''}
+      `;
+      col.addEventListener('click', () => showDetail(i));
+      barsEl.appendChild(col);
+    });
+  }
+
+  function showDetail(i) {
+    const m = MODELS[i];
+    const isHybrid = m.key === 'hybrid';
+    detailEl.style.display = 'block';
+    detailEl.innerHTML = `
+      <div class="vmc-detail-head">
+        <div class="vmc-detail-name">${m.name} 모델이 선택한 변수</div>
+        <div class="vmc-detail-r2">R² = ${m.r2.toFixed(4)}</div>
+      </div>
+      <div class="vmc-vars">
+        ${m.vars.map(v => `<div class="vmc-var-pill ${isHybrid ? 'is-hybrid' : ''}">${v}</div>`).join('')}
+      </div>
+      <div class="vmc-detail-note">${m.note}</div>
+    `;
+  }
+  if (barsEl) showDetail(3);
+
+  // Part B: qualitative direction simulator (no fabricated coefficients)
+  const vmsState = { nF: 55, nO700: 30, nO777: 45 };
+  const sliderDefs = [
+    { id: 'nF', label: 'F 라디칼 밀도 (nF)', sign: '+ 촉진' },
+    { id: 'nO700', label: 'O 라디칼 700nm (nO_700)', sign: '− 억제' },
+    { id: 'nO777', label: 'O 라디칼 777nm (nO_777)', sign: '+ 촉진' },
+  ];
+  const slidersEl = document.getElementById('vms-sliders');
+  if (slidersEl) {
+    sliderDefs.forEach(d => {
+      const item = document.createElement('div');
+      item.className = 'vms-slider-item';
+      item.innerHTML = `
+        <div class="vms-slider-label">
+          <span><span class="name">${d.label}</span><span class="sign">${d.sign}</span></span>
+          <span class="val" id="vms-val-${d.id}">${vmsState[d.id]}</span>
+        </div>
+        <input type="range" min="0" max="100" step="1" value="${vmsState[d.id]}" id="vms-slider-${d.id}">
+      `;
+      slidersEl.appendChild(item);
+    });
+    sliderDefs.forEach(d => {
+      document.getElementById(`vms-slider-${d.id}`).addEventListener('input', e => {
+        vmsState[d.id] = Number(e.target.value);
+        document.getElementById(`vms-val-${d.id}`).textContent = vmsState[d.id];
+        updateInterpretation();
+      });
+    });
+  }
+
+  function computeInterpretation(nF, nO700, nO777) {
+    if (nF > 75 && nO700 > 60) {
+      return '지금 이 구간은 라디칼 과포화 상태입니다. F 라디칼과 억제 성분(nO 700nm)이 동시에 높아 활성 부위가 막히면서 Etch Rate 상승이 둔화되는 경향을 보였습니다.';
+    }
+    if (nO700 > nO777 * 1.3) {
+      return '억제 성분(nO 700nm)이 촉진 성분(nO 777nm)보다 우세한 구간입니다. O2 과잉으로 인한 활성 부위 차단 효과가 F 라디칼 기여를 상쇄하는 경향을 보였습니다.';
+    }
+    if (nO777 > nO700 * 1.3 && nF > 50) {
+      return 'O2 첨가가 F 라디칼 해방을 촉진하는 구간입니다. nO(777nm)의 양(+)의 기여가 SiF4 생성 반응을 뒷받침하는 경향을 보였습니다.';
+    }
+    if (nF > 80) {
+      return 'F 라디칼이 확실히 우세한 구간입니다. SiF4 생성이 활발해 Etch Rate가 F 밀도 변화에 민감하게 반응하는 경향을 보였습니다.';
+    }
+    return '촉진·억제 성분이 비교적 균형을 이루는 구간입니다.';
+  }
+
+  function updateInterpretation() {
+    const target = document.getElementById('vms-interpretation');
+    if (!target) return;
+    target.textContent = computeInterpretation(vmsState.nF, vmsState.nO700, vmsState.nO777);
+  }
+  updateInterpretation();
+})();
+</script>
 </body>
 </html>

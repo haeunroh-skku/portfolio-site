@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<link rel="stylesheet" href="../css/style.css?v=18">
+<link rel="stylesheet" href="../css/style.css?v=26">
 </head>
 <body>
 
@@ -57,6 +57,7 @@
         <a href="#problem">문제 정의</a>
         <a href="#approach">접근 방법</a>
         <a href="#result">결과</a>
+        <a href="#demo">인터랙티브 데모</a>
         <a href="#discussion">LLM 해석 리포트</a>
         <a href="#learning">배운 점 & 한계</a>
         <a href="#files">첨부 자료</a>
@@ -166,20 +167,196 @@
           </p>
         </section>
 
+        <section id="demo">
+          <h2>인터랙티브 데모</h2>
+          <p>
+            모델이 실제로 뱉는 건 0~1 사이의 확률 점수 하나뿐이고, 이걸 "정상/불량"으로
+            가르는 기준선(threshold)은 사람이 정하는 값입니다. 위 결과표는 threshold=0.5
+            기준이었는데, 이 기준을 낮추면 애매한 점수까지 전부 "불량"으로 넘어가서
+            Recall은 오르지만 오탐(FP)도 같이 늘어나는 trade-off가 생깁니다. 이 관계를
+            눈으로 확인하고 싶어서 만든 대시보드입니다.
+          </p>
+          <p>
+            314개 테스트 샘플 각각의 예측 확률값은 따로 저장해두지 않고 F1·AUC·Confusion
+            Matrix 같은 집계 결과만 리포트에 남겨서 원본 점수를 그대로 가져올 수는 없었습니다.
+            대신 두 모델의 점수 분포를 흉내낸 가상의 점수 배열을 만들고, threshold=0.5에서는 실제 리포트의 Confusion
+            Matrix(RF F1 0.9654·AUC 0.6842, XGBoost F1 0.9652·AUC 0.6933)와 똑같은 숫자가
+            나오도록 점수 범위를 역산해서 맞춰뒀습니다. 슬라이더를 움직이면 그 threshold
+            기준으로 TP/FP/FN/TN을 다시 세고, Precision·Recall·F1·ROC를 그 자리에서
+            재계산해서 그려주는 방식이라, 0.5 지점 말고는 실측이 아니라 근사치라는 점은
+            감안하고 봐주세요.
+          </p>
+          <div class="yield-dashboard">
+            <div class="yd-layout">
+              <div class="yd-controls-col">
+                <div class="yd-control">
+                  <div class="yd-control-label"><span>Threshold</span><span class="yd-value" id="yd-thresholdLabel">0.50</span></div>
+                  <input type="range" id="yd-thresholdSlider" min="0" max="1" step="0.01" value="0.5">
+                  <div class="yd-hint">분류 기준 점수. 낮출수록 Fail 검출 민감도(Recall) 상승, 오탐(FP) 증가.</div>
+                </div>
+                <div class="yd-control">
+                  <div class="yd-control-label"><span>불균형 보정 모델</span></div>
+                  <div class="yd-toggle">
+                    <button type="button" class="yd-toggle-btn active" id="yd-btn-rf">Random Forest</button>
+                    <button type="button" class="yd-toggle-btn" id="yd-btn-xgb">XGBoost</button>
+                  </div>
+                  <div class="yd-hint" id="yd-modelDesc"></div>
+                </div>
+                <div class="yd-metrics yd-metrics-col">
+                  <div><span class="yd-metric-value" id="yd-v-auc">–</span><span class="yd-metric-label">AUC</span></div>
+                  <div><span class="yd-metric-value" id="yd-v-f1">–</span><span class="yd-metric-label">F1 Score</span></div>
+                  <div><span class="yd-metric-value" id="yd-v-precision">–</span><span class="yd-metric-label">Precision</span></div>
+                  <div><span class="yd-metric-value" id="yd-v-recall">–</span><span class="yd-metric-label">Recall</span></div>
+                </div>
+              </div>
+
+              <div class="yd-panels">
+                <div class="yd-chart-card">
+                  <div class="yd-chart-title">Threshold별 지표 — <span id="yd-modelLabel1">Random Forest</span></div>
+                  <div class="yd-chart-sub">Precision / Recall / F1</div>
+                  <svg viewBox="0 0 300 160" class="yd-svg">
+                    <line x1="0" y1="0" x2="0" y2="150" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"></line>
+                    <line x1="0" y1="150" x2="300" y2="150" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"></line>
+                    <path id="yd-precisionPath" fill="none" stroke="var(--text-faint)" stroke-width="2"></path>
+                    <path id="yd-recallPath" fill="none" stroke="var(--text-dim)" stroke-width="2"></path>
+                    <path id="yd-f1Path" fill="none" stroke="var(--accent-dark)" stroke-width="2.5"></path>
+                    <line id="yd-thresholdMarker" y1="0" y2="150" stroke="var(--accent-dark)" stroke-width="1" stroke-dasharray="3,3"></line>
+                  </svg>
+                  <div class="yd-legend">
+                    <span><span class="yd-legend-dot" style="background:var(--text-faint);"></span>Precision</span>
+                    <span><span class="yd-legend-dot" style="background:var(--text-dim);"></span>Recall</span>
+                    <span><span class="yd-legend-dot" style="background:var(--accent-dark);"></span>F1</span>
+                  </div>
+                </div>
+
+                <div class="yd-chart-card">
+                  <div class="yd-chart-title">ROC Curve — <span id="yd-modelLabel2">Random Forest</span></div>
+                  <div class="yd-chart-sub">AUC = <span id="yd-aucLabel">0.6842</span></div>
+                  <svg viewBox="0 0 160 160" class="yd-svg">
+                    <line x1="0" y1="0" x2="0" y2="150" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"></line>
+                    <line x1="0" y1="150" x2="150" y2="150" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"></line>
+                    <line x1="0" y1="150" x2="150" y2="0" stroke="currentColor" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="2,2"></line>
+                    <path id="yd-rocPath" fill="none" stroke="var(--accent-dark)" stroke-width="2.5"></path>
+                  </svg>
+                </div>
+
+                <div class="yd-chart-card">
+                  <div class="yd-chart-title">Confusion Matrix — <span id="yd-modelLabel3">Random Forest</span></div>
+                  <div class="yd-chart-sub">Test set 314건 (정상 21 / 불량 293)</div>
+                  <div class="yd-cm-grid">
+                    <div></div>
+                    <div class="yd-cm-colhead">예측: 정상</div>
+                    <div class="yd-cm-colhead">예측: 불량</div>
+
+                    <div class="yd-cm-rowhead">실제: 정상</div>
+                    <div class="yd-cm-cell" id="yd-cellTN"><div class="yd-cm-count" id="yd-cellTN-count">0</div><div class="yd-cm-tag">TN</div></div>
+                    <div class="yd-cm-cell" id="yd-cellFP"><div class="yd-cm-count" id="yd-cellFP-count">0</div><div class="yd-cm-tag">FP</div></div>
+
+                    <div class="yd-cm-rowhead">실제: 불량</div>
+                    <div class="yd-cm-cell" id="yd-cellFN"><div class="yd-cm-count" id="yd-cellFN-count">0</div><div class="yd-cm-tag">FN</div></div>
+                    <div class="yd-cm-cell" id="yd-cellTP"><div class="yd-cm-count" id="yd-cellTP-count">0</div><div class="yd-cm-tag">TP</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="discussion">
           <h2>LLM 해석 리포트</h2>
           <p>
             분석 결과(성능 지표, Feature Importance)를 텍스트로 정리해 Gemini(LangChain
             PromptTemplate)에 전달하면, 아래 4개 섹션으로 구성된 해석 리포트를 자동으로
-            작성하도록 파이프라인을 구성했습니다.
+            작성하도록 프롬프트를 설계했습니다.
           </p>
           <ul class="bullets">
             <li><strong>모델 성능 해석:</strong> 두 모델의 성능 차이를 불량 탐지 관점에서 해석</li>
             <li><strong>핵심 Feature 분석:</strong> SECOM 변수명이 익명화(숫자)되어 있어, 일반적인 반도체 Process 센서(Process 조건·장비 상태·전후 Process 영향) 관점에서 의미를 추론</li>
-            <li><strong>수율 개선 제안 3가지:</strong> ① 변수 28·59에 대한 심층 분석 및 관리 한계 재검토 ② 모델 기반 실시간 수율 모니터링 시스템 구축 ③ 핵심 변수 간 상호작용 분석으로 Process 윈도우 최적화</li>
-            <li><strong>분석의 한계 4가지:</strong> ① 변수 익명화로 실제 Process 파라미터 매핑 불가 ② 불량 유형(Defect Type) 정보 부재 ③ 시점 스냅샷 데이터라 시계열 트렌드 미반영 ④ SHAP·LIME 같은 설명가능 AI(XAI) 기법 부재</li>
+            <li><strong>수율 개선 제안 3가지:</strong> 현업 엔지니어가 바로 쓸 수 있는 구체적 액션</li>
+            <li><strong>분석의 한계 및 개선 방향:</strong> 이 분석에서 아쉬운 점과 실제 Process 적용 시 고려사항</li>
           </ul>
-       
+          <p>실제로 Gemini 2.5 Flash가 생성한 리포트의 시작 부분입니다:</p>
+          <div class="callout" style="font-style:italic;">
+            "두 모델 모두 0.965를 넘는 매우 높은 F1 스코어를 달성했다는 것은, 불량 웨이퍼(또는
+            랏)를 정확하게 예측하고(높은 정밀도), 실제 불량 웨이퍼를 놓치지 않고 잘 찾아내는(높은
+            재현율) 능력이 매우 우수하다는 것을 의미합니다. (...) XGBoost가 Random Forest보다
+            약간 높은 AUC(0.6933 vs 0.6842)를 보였으나, 그 차이는 미미합니다."
+          </div>
+
+          <details class="report-details">
+            <summary>전체 리포트 원문 보기 (Gemini 2.5 Flash 생성, 무편집)</summary>
+            <div class="report-body">
+              <p>
+                제공해주신 데이터를 바탕으로 Random Forest와 XGBoost 두 가지 머신러닝 모델을
+                활용하여 수율 예측 분석을 수행하였습니다. 분석 결과를 토대로 모델 성능 해석,
+                핵심 Feature 분석, 수율 개선 제안 및 분석의 한계점을 정리하여 보고드립니다.
+              </p>
+
+              <p style="margin-top:20px;"><strong>1. 모델 성능 해석</strong></p>
+              <p>
+                두 모델 모두 매우 높은 F1 스코어를 기록하여 불량 탐지 및 양품 분류에 있어
+                뛰어난 성능을 보였습니다.
+              </p>
+              <ul class="bullets">
+                <li>Random Forest: F1=0.9654, AUC=0.6842</li>
+                <li>XGBoost: F1=0.9652, AUC=0.6933</li>
+              </ul>
+              <p>
+                F1 스코어는 정밀도(Precision)와 재현율(Recall)의 조화 평균으로, 특히 불균형
+                데이터셋에서 모델의 성능을 평가하는 데 유용합니다. 두 모델 모두 0.965를 넘는
+                매우 높은 F1 스코어를 달성했다는 것은, 불량 웨이퍼(또는 랏)를 정확하게
+                예측하고(높은 정밀도), 실제 불량 웨이퍼를 놓치지 않고 잘 찾아내는(높은 재현율)
+                능력이 매우 우수하다는 것을 의미합니다. 이는 수율 엔지니어 관점에서 불량 발생
+                가능성이 있는 Process를 사전에 감지하고 조치하는 데 있어 모델의 예측 신뢰도가
+                매우 높음을 시사합니다.
+              </p>
+              <p>
+                AUC(Area Under the ROC Curve)는 모델이 양성 클래스와 음성 클래스를 얼마나 잘
+                구분하는지를 나타내는 지표입니다. XGBoost가 Random Forest보다 약간 높은
+                AUC(0.6933 vs 0.6842)를 보였으나, 그 차이는 미미합니다. 두 모델 모두 0.7에
+                가까운 AUC를 기록하여, 불량과 양품을 구분하는 능력이 합리적인 수준임을
+                보여줍니다.
+              </p>
+
+              <p style="margin-top:20px;"><strong>2. 핵심 Feature 분석</strong></p>
+              <p>
+                두 모델에서 공통으로 중요하게 도출된 Feature와 각 모델별 상위 Feature를 분석하여
+                반도체 Process에서의 의미를 추론합니다. SECOM 데이터의 Feature 이름이
+                익명화(숫자)되어 있으므로, 일반적인 반도체 Process 센서 관점에서 해석합니다.
+              </p>
+              <p><strong>두 모델 공통 상위 Feature: 59, 28</strong></p>
+              <p>
+                Feature 59와 28은 Random Forest와 XGBoost 모두에서 높은 중요도를 보인 핵심
+                Feature입니다. 이는 이 두 Feature가 수율 변동에 가장 직접적이고 강력한 영향을
+                미치는 Process 파라미터 또는 센서 데이터일 가능성이 매우 높다는 것을 의미합니다.
+                일반적인 반도체 Process에서 수율에 큰 영향을 미치는 파라미터로는 온도, 압력,
+                가스 유량, RF Power/DC Voltage, Process 시간, 엔드포인트 감지 신호 등이 있으며,
+                Feature 59와 28은 특정 핵심 Process 단계의 주된 온도·압력·가스 유량·RF Power와
+                같은 핵심 제어 파라미터일 가능성이 높습니다.
+              </p>
+              <p>
+                종합적으로 볼 때, Feature 59와 28은 수율에 대한 1차적인 핵심 드라이버이며, 각
+                모델에서 추가로 도출된 Feature들은 이 핵심 드라이버와 상호작용하거나, 특정
+                Process 조건에서 수율에 영향을 미치는 2차적 또는 보조적인 요인들로 해석될 수
+                있습니다.
+              </p>
+
+              <p style="margin-top:20px;"><strong>3. 수율 개선 제안</strong></p>
+              <ul class="bullets">
+                <li><strong>핵심 Feature(59, 28)에 대한 집중적인 Process 모니터링 및 제어 강화:</strong> 두 Feature가 어떤 Process 단계의 어떤 물리적 파라미터인지 우선 식별하고, 실시간 모니터링 빈도를 높여 SPC 관리 한계를 더 엄격하게 설정</li>
+                <li><strong>모델별 상위 Feature에 대한 심층 분석 및 Process 연관성 파악:</strong> 상위 5~10개 Feature의 물리적 의미를 파악하고 과거 데이터·수율 변동 이력을 교차 분석</li>
+                <li><strong>Feature 값과 수율 간 정량적 관계 분석 및 Process 최적화 연구:</strong> 회귀 분석·Partial Dependence Plot·SHAP 값 분석으로 각 Feature의 최적 운영 범위를 도출하고 DOE로 Process 파라미터 최적화 시도</li>
+              </ul>
+
+              <p style="margin-top:20px;"><strong>4. 분석의 한계 및 개선 방향</strong></p>
+              <ul class="bullets">
+                <li><strong>Feature 익명화의 한계:</strong> Feature 번호와 실제 Process 센서·파라미터 이름을 매핑하는 작업이 선행되어야 분석 결과가 실질적인 액션으로 이어질 수 있음</li>
+                <li><strong>인과 관계 파악의 한계:</strong> 모델은 상관관계를 잘 찾아내지만 인과 관계를 의미하지는 않으므로, 도메인 지식 기반 근본 원인 분석과 필요시 DOE를 통한 인과 검증이 필요</li>
+                <li><strong>모델 해석력의 한계:</strong> Feature 중요도만으로는 방향성·최적 범위를 알 수 없어 SHAP·LIME 같은 설명가능 AI(XAI) 기법 추가 적용이 필요</li>
+                <li><strong>데이터의 시간적·공간적 맥락 부족:</strong> 특정 시점 데이터라 지속적 재학습과 장비별·라인별 맞춤 분석, 유지보수 이력 등 맥락 정보 결합이 필요</li>
+              </ul>
+            </div>
+          </details>
         </section>
 
         <section id="learning">
@@ -225,5 +402,139 @@
 
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="../js/main.js?v=4"></script>
+<script>
+(function () {
+  const root = document.querySelector('.yield-dashboard');
+  if (!root) return;
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const rand = mulberry32(7);
+  const spread = (n, lo, hi) => Array.from({ length: n }, () => lo + rand() * (hi - lo));
+
+  const data = {
+    rf: { auc: 0.6842, pass: spread(21, 0.50, 0.93), fail: spread(293, 0.50, 0.985) },
+    xgb: {
+      auc: 0.6933,
+      pass: [...spread(19, 0.50, 0.90), ...spread(2, 0.12, 0.42)],
+      fail: [...spread(291, 0.50, 0.975), ...spread(2, 0.08, 0.38)]
+    }
+  };
+
+  function confusionAt(pass, fail, t) {
+    let tp = 0, fn = 0, fp = 0, tn = 0;
+    fail.forEach(s => { if (s >= t) tp++; else fn++; });
+    pass.forEach(s => { if (s >= t) fp++; else tn++; });
+    return { tp, fn, fp, tn };
+  }
+
+  function metricsAt(pass, fail, t) {
+    const { tp, fn, fp, tn } = confusionAt(pass, fail, t);
+    const precision = tp + fp === 0 ? 0 : tp / (tp + fp);
+    const recall = tp + fn === 0 ? 0 : tp / (tp + fn);
+    const f1 = precision + recall === 0 ? 0 : (2 * precision * recall) / (precision + recall);
+    return { tp, fn, fp, tn, precision, recall, f1 };
+  }
+
+  function pathFromPoints(pts, w, h, invertY) {
+    return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * w).toFixed(2)} ${(invertY ? (1 - p.y) : p.y) * h}`).join(' ');
+  }
+
+  function cellShade(count, maxCount) {
+    const intensity = maxCount === 0 ? 0 : count / maxCount;
+    const dark = 0.10 + 0.70 * intensity;
+    return { bg: `rgba(26,26,26,${dark.toFixed(2)})`, color: intensity > 0.45 ? '#fff' : 'var(--text)' };
+  }
+
+  const state = { threshold: 0.5, model: 'rf' };
+
+  const el = id => document.getElementById(id);
+  const thresholdLabel = el('yd-thresholdLabel');
+  const thresholdSlider = el('yd-thresholdSlider');
+  const btnRf = el('yd-btn-rf');
+  const btnXgb = el('yd-btn-xgb');
+  const modelDesc = el('yd-modelDesc');
+
+  function render() {
+    const { threshold, model } = state;
+    const { pass, fail, auc } = data[model];
+    const mm = metricsAt(pass, fail, threshold);
+    const modelLabel = model === 'rf' ? 'Random Forest' : 'XGBoost';
+
+    thresholdLabel.textContent = threshold.toFixed(2);
+    modelDesc.textContent = model === 'rf'
+      ? "Random Forest · class_weight='balanced'. 불량을 놓치진 않지만 정상 샘플까지 대부분 불량으로 오탐."
+      : 'XGBoost · scale_pos_weight로 보정. AUC가 더 높고 일부 정상 샘플도 맞혀 상대적으로 균형 잡힌 예측.';
+    btnRf.classList.toggle('active', model === 'rf');
+    btnXgb.classList.toggle('active', model === 'xgb');
+
+    el('yd-v-auc').textContent = auc.toFixed(4);
+    el('yd-v-f1').textContent = mm.f1.toFixed(4);
+    el('yd-v-precision').textContent = mm.precision.toFixed(4);
+    el('yd-v-recall').textContent = mm.recall.toFixed(4);
+
+    el('yd-modelLabel1').textContent = modelLabel;
+    el('yd-modelLabel2').textContent = modelLabel;
+    el('yd-modelLabel3').textContent = modelLabel;
+    el('yd-aucLabel').textContent = auc.toFixed(4);
+
+    const steps = 40;
+    const precPts = [], recPts = [], f1Pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const p = metricsAt(pass, fail, t);
+      precPts.push({ x: t, y: p.precision });
+      recPts.push({ x: t, y: p.recall });
+      f1Pts.push({ x: t, y: p.f1 });
+    }
+    el('yd-precisionPath').setAttribute('d', pathFromPoints(precPts, 300, 150, true));
+    el('yd-recallPath').setAttribute('d', pathFromPoints(recPts, 300, 150, true));
+    el('yd-f1Path').setAttribute('d', pathFromPoints(f1Pts, 300, 150, true));
+    el('yd-thresholdMarker').setAttribute('x1', (threshold * 300).toFixed(1));
+    el('yd-thresholdMarker').setAttribute('x2', (threshold * 300).toFixed(1));
+
+    const rocSteps = 60;
+    const rocPts = [];
+    for (let i = 0; i <= rocSteps; i++) {
+      const t = 1 - i / rocSteps;
+      const c = confusionAt(pass, fail, t);
+      const tpr = c.tp + c.fn === 0 ? 0 : c.tp / (c.tp + c.fn);
+      const fpr = c.fp + c.tn === 0 ? 0 : c.fp / (c.fp + c.tn);
+      rocPts.push({ x: fpr, y: tpr });
+    }
+    el('yd-rocPath').setAttribute('d', pathFromPoints(rocPts, 150, 150, true));
+
+    const maxCount = Math.max(mm.tp, mm.fn, mm.fp, mm.tn, 1);
+    const cells = {
+      TN: { count: mm.tn, ...cellShade(mm.tn, maxCount) },
+      FP: { count: mm.fp, ...cellShade(mm.fp, maxCount) },
+      FN: { count: mm.fn, ...cellShade(mm.fn, maxCount) },
+      TP: { count: mm.tp, ...cellShade(mm.tp, maxCount) },
+    };
+    Object.keys(cells).forEach(key => {
+      const c = cells[key];
+      el(`yd-cell${key}-count`).textContent = c.count;
+      const cellEl = el(`yd-cell${key}`);
+      cellEl.style.background = c.bg;
+      cellEl.style.color = c.color;
+    });
+  }
+
+  thresholdSlider.addEventListener('input', e => {
+    state.threshold = parseFloat(e.target.value);
+    render();
+  });
+  btnRf.addEventListener('click', () => { state.model = 'rf'; render(); });
+  btnXgb.addEventListener('click', () => { state.model = 'xgb'; render(); });
+
+  render();
+})();
+</script>
 </body>
 </html>

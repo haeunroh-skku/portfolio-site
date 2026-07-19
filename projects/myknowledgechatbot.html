@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
-<link rel="stylesheet" href="../css/style.css?v=18">
+<link rel="stylesheet" href="../css/style.css?v=26">
 </head>
 <body>
 
@@ -32,13 +32,13 @@
       <div class="eyebrow">LLM / RAG</div>
       <h1>My Knowledge Chatbot 만들기</h1>
       <p style="max-width:640px;">
-        Hy-Po 9기 수업을 진행하면서 정리한 온라인 노트를 베이스로 삼아 그 내용에 근거해서만 답변하는
+        반도체 수업을 진행하면서 정리한 온라인 노트를 베이스로 삼아 그 내용에 근거해서만 답변하는
         개인용 학습 챗봇을 만든 프로젝트입니다. LangChain과 Gemini API, Chroma 벡터 DB로
         검색 증강 생성(RAG) 파이프라인을 구성해, 여러 폴더를 직접 뒤지지 않고 질문 한 번으로
         언제 배운 개념인지부터 수율과의 연관성까지 구조화된 답변을 받을 수 있게 됐습니다.
       </p>
       <div class="detail-meta">
-        <div><span>기간</span><span>2026.06 – 2026.08 (청년 Hy-po 9기)</span></div>
+        <div><span>기간</span><span>2026.06 - 2026.08</span></div>
         <div><span>구분</span><span>개인 프로젝트</span></div>
         <div><span>스택</span><span>LangChain, Google Gemini API, Chroma, Google Colab</span></div>
 
@@ -67,7 +67,7 @@
         <section id="overview">
           <h2>개요</h2>
           <p>
-            청년 Hy-po 9기 프로그램을 들으며 매일 교육 중 나온 물성·소자·반도체 Process
+            청년 Hy-po 프로그램을 들으며 매일 교육 중 나온 물성·소자·반도체 Process
             관련 생소한 용어들을 복습하고 정리했습니다. 회로·소자·생산관리 등 여러 과목에서
             배우는 용어를 수율 엔지니어의 시각으로 다시 정리해두는 과정이 꼭 필요했는데, 막상
             같은 개념이 다시 나왔을 때 예전에 정리해둔 내 노트를 빠르게 찾아보기가 어려웠습니다.
@@ -152,41 +152,47 @@
             받아 복기할 수 있음을 확인했습니다. ipywidgets 기반 채팅 UI에서 마크다운 서식이 적용된
             답변으로 실시간 질의응답이 가능합니다.
           </p>
-          <div class="chat-mock">
-            <div class="chat-mock-toolbar">
-              <div class="chat-mock-input">질문을 입력하세요...</div>
-              <div class="chat-mock-btn">전송</div>
-              <div class="chat-mock-btn">대화 초기화</div>
-            </div>
-            <div class="chat-row user">
-              <span class="chat-label">나</span>
-              <div class="chat-bubble user">CPO가 뭐더라? 내가 뭐라고 필기해뒀지?</div>
-            </div>
-            <div class="chat-row bot">
-              <span class="chat-label">챗봇</span>
-              <div class="chat-bubble bot">
-                <p>안녕하세요! 하이포에서 6월 29일 배운 CPO(Co-packaged optics) 내용과 관련있네요!</p>
-                <p><strong>1. 핵심 개념</strong><br>CPO(Co-packaged optics)는 연산 기능을 가진 반도체(GPU, NPU 등)와 전기 신호를 빛으로 바꿔 대용량 데이터를 외부와 송수신하는 반도체(실리콘 포토닉스, 광학 칩)를 하나의 패키지 안에 수 mm 이내로 근접하게 배치하는 차세대 패키징 기술입니다. 기존에는 전기 신호가 구리 배선을 타고 이동하며 정보 손실, 속도 저하, 전력 소모, 발열 등의 문제가 발생했지만, CPO는 이러한 문제를 해결하여 전력 소모를 크게 줄이고 더 큰 대역폭을 지원할 수 있게 합니다.</p>
-                <p><strong>2. 수율/Process과의 연관성</strong><br>CPO는 여러 종류의 칩을 하나의 패키지 안에 고도로 집적하는 기술이므로, 수율과 Process 측면에서 다음과 같은 연관성을 가집니다.</p>
-                <ul>
-                  <li><strong>고난도 패키징 Process:</strong> 메인 반도체와 광학 칩을 수 mm 이내로 근접하게 배치하고 결합하는 것은 매우 정밀한 어셈블리 및 본딩 Process을 요구합니다. 칩 정렬 불량, 접합 불량, 이종 재료 간 호환성 문제 등이 전체 패키지 수율에 직접 영향을 미칩니다.</li>
-                  <li><strong>열 관리:</strong> 고성능 연산 칩과 광학 칩이 한 패키지 안에 집적되며 발생하는 발열을 효과적으로 제어하지 못하면 성능 저하와 신뢰성 문제로 수율이 떨어질 수 있습니다.</li>
-                  <li><strong>신호 무결성:</strong> 전기·광 신호 변환 및 전송 과정에서 손실을 최소화해야 하며, 인터페이스 설계와 제조 정밀도에 따라 최종 제품 성능·수율이 좌우됩니다.</li>
-                  <li><strong>이종 집적 기술:</strong> 연산 칩과 광학 칩(실리콘 포토닉스)을 통합하는 이종 집적(Heterogeneous Integration) 기술이 CPO 수율 향상의 핵심 요소입니다.</li>
-                </ul>
-                <p><strong>3. 더 찾아볼 키워드</strong></p>
-                <ul>
-                  <li>실리콘 포토닉스 (Silicon Photonics)</li>
-                  <li>이종 집적 (Heterogeneous Integration)</li>
-                  <li>어드밴스드 패키징 (Advanced Packaging)</li>
-                  <li>광통신 모듈 (Optical Transceiver Module)</li>
-                  <li>데이터센터 아키텍처 (Data Center Architecture)</li>
-                  <li>열 관리 기술 (Thermal Management Technology)</li>
-                </ul>
+          <p>
+            실제 코드는 깃허브로 들어가셔서 확인하실 수 있으며, 아래는 웹사이트에 실제 화면을 그대로 체험해볼 수 있게 하고자 만든 UI 프로토타입입니다. CPO 질문은
+            실제 답변 내용 그대로이고, 나머지 두 개(포토리소그래피, 도즈)는 같은 형식을 보여주기
+            위한 예시입니다.
+          </p>
+          <div class="callout">
+            <strong>참고:</strong> 이 프로토타입은 LangChain/Gemini/Chroma 백엔드에 연결되어
+            있지 않습니다. 미리 정해둔 3개 질문에 대해서만 정해진 답변이 나오는 프론트엔드
+            UI 시연용이며, 실제 RAG 파이프라인은 위 접근 방법에서 설명한 Google Colab 노트북으로
+            동작합니다!
+          </div>
+
+          <div class="hpc-widget">
+            <div class="hpc-layout">
+              <div class="hpc-chat-col">
+                <div class="hpc-chat-header">
+                  <div class="hpc-chat-avatar">하</div>
+                  <div>
+                    <div class="hpc-chat-name">하이포_챗</div>
+                    <div class="hpc-chat-status" id="hpc-status">노트 기반 답변 준비 완료</div>
+                  </div>
+                  <button type="button" class="hpc-reset-btn" id="hpc-reset">↺ 대화 초기화</button>
+                </div>
+                <div class="hpc-messages" id="hpc-messages"></div>
+                <div class="hpc-chips" id="hpc-chips"></div>
+                <div class="hpc-input-row">
+                  <input type="text" id="hpc-input" class="hpc-input" placeholder="질문을 입력하세요... (예: CPO가 뭐더라?)">
+                  <button type="button" class="hpc-send-btn" id="hpc-send">전송</button>
+                </div>
+              </div>
+
+              <div class="hpc-side-col">
+                <div class="hpc-side-label">검색 파이프라인</div>
+                <div class="hpc-pipeline" id="hpc-pipeline"></div>
+                <div class="hpc-side-label" style="margin-top:18px;">검색된 노트 (k=4)</div>
+                <div class="hpc-chunks" id="hpc-chunks">
+                  <div class="hpc-chunks-empty">질문을 입력하면 벡터 DB에서 검색된 노트 청크 4개가 여기 표시됩니다.</div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="figure-caption">실제 실행 화면을 옮겨 재구성한 질의응답 예시 — "물성 및 소자" 노트 기반 CPO 질문</div>
         </section>
 
         <section id="learning">
@@ -233,5 +239,210 @@
 
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="../js/main.js?v=4"></script>
+<script>
+(function () {
+  const root = document.querySelector('.hpc-widget');
+  if (!root) return;
+
+  const PRESETS = [
+    {
+      triggers: ['cpo', 'co-packaged'],
+      label: 'CPO가 뭐더라? 내가 뭐라고 필기해뒀지?',
+      greeting: '안녕하세요! 하이포에서 6월 29일 배운 CPO(Co-packaged optics) 내용과 관련있네요!',
+      sections: [
+        { title: '핵심 개념', body: 'CPO(Co-packaged optics)는 연산 기능을 가진 반도체(GPU, NPU 등)와 전기 신호를 빛으로 바꿔 대용량 데이터를 외부와 송수신하는 반도체(실리콘 포토닉스, 광학 칩)를 하나의 패키지 안에 수 mm 이내로 근접하게 배치하는 차세대 패키징 기술입니다. 기존에는 전기 신호가 구리 배선을 타고 이동하며 정보 손실, 속도 저하, 전력 소모, 발열 등의 문제가 발생했지만, CPO는 이러한 문제를 해결하여 전력 소모를 크게 줄이고 더 큰 대역폭을 지원할 수 있게 합니다.' },
+        { title: '수율/Process과의 연관성', body: 'CPO는 여러 종류의 칩을 하나의 패키지 안에 고도로 집적하는 기술이므로, 칩 정렬·본딩 정밀도와 열 관리, 신호 무결성이 전체 패키지 수율에 직접 영향을 미칩니다.' },
+        { title: '더 찾아볼 키워드', body: '실리콘 포토닉스, 이종 집적(Heterogeneous Integration), 어드밴스드 패키징, 광통신 모듈' }
+      ],
+      keywords: ['실리콘 포토닉스', '이종 집적', '어드밴스드 패키징', '광통신 모듈'],
+      chunks: [
+        { file: '반도체Process/2026-06-29-CPO.md', excerpt: 'CPO는 연산 기능을 가진 반도체와 광학 칩을 하나의 패키지 안에 근접 배치하는 기술로...' },
+        { file: '반도체Process/2026-06-29-CPO.md · #2', excerpt: '기존 전기 배선 대비 대역폭이 크고 전력 소모가 낮아 데이터센터향 응용이 확대되는 중...' },
+        { file: '물성및소자/2026-05-14-실리콘포토닉스.md', excerpt: '실리콘 포토닉스는 빛을 이용해 데이터를 전송하는 광학 소자 기술로, CPO의 핵심 구성 요소...' },
+        { file: '생산관리/2026-04-02-이종집적.md', excerpt: '이종 집적 공정에서는 서로 다른 소재·공정으로 만든 칩 간 정렬 정밀도가 수율을 좌우...' }
+      ]
+    },
+    {
+      triggers: ['포토리소그래피', '노광'],
+      label: '포토리소그래피 노광 공정 설명해줘',
+      greeting: '안녕하세요! 하이포에서 7월 6일 배운 포토리소그래피 키워드와 관련있네요!',
+      sections: [
+        { title: '핵심 개념', body: '포토레지스트를 도포한 웨이퍼에 마스크 패턴을 빛으로 전사해 회로 패턴을 새기는 공정입니다. 노광 → 현상 → 식각 순으로 진행됩니다.' },
+        { title: '수율/Process과의 연관성', body: '노광 에너지(Dose)와 초점(Focus) 편차가 CD(임계치수) 균일도를 좌우하고, 스캐너 정렬 오차는 오버레이 불량으로 이어져 수율에 직접 영향을 줍니다.' },
+        { title: '더 찾아볼 키워드', body: '오버레이, CD 균일도, 포토레지스트, EUV 노광' }
+      ],
+      keywords: ['오버레이', 'CD 균일도', '포토레지스트', 'EUV 노광'],
+      chunks: [
+        { file: '반도체Process/2026-07-06-포토리소그래피.md', excerpt: '노광 공정은 포토레지스트가 도포된 웨이퍼에 마스크 패턴을 전사하는 단계로...' },
+        { file: '반도체Process/2026-07-06-포토리소그래피.md · #2', excerpt: 'Focus-Dose Matrix 실험으로 최적 노광 조건을 도출하는 과정을 정리...' },
+        { file: '소자/2026-07-01-CD균일도.md', excerpt: '임계치수(CD) 편차는 소자 특성 산포로 직결되어 다이별 수율 차이를 유발...' },
+        { file: '생산관리/2026-07-02-오버레이.md', excerpt: '오버레이 불량은 후속 공정 정렬 기준점이 어긋나며 발생, 스캐너 보정으로 관리...' }
+      ]
+    },
+    {
+      triggers: ['도즈', 'dose'],
+      label: '도즈(Dose)가 수율에 미치는 영향은?',
+      greeting: '안녕하세요! 하이포에서 7월 9일 배운 도즈(Dose) 키워드와 관련있네요!',
+      sections: [
+        { title: '핵심 개념', body: '노광 시 웨이퍼 단위 면적에 조사되는 빛의 총량(또는 이온주입 시 이온의 양)을 말하며, CD와 PR 프로파일을 결정하는 핵심 변수입니다.' },
+        { title: '수율/Process과의 연관성', body: '도즈 과다·부족은 CD 산포와 PR 잔막 두께 이상을 유발해 후속 식각·증착 공정 불량으로 전이되며, 대표적인 수율 저하 요인입니다.' },
+        { title: '더 찾아볼 키워드', body: '이온주입 도즈, Focus-Dose Matrix, PR 프로파일, CD 산포' }
+      ],
+      keywords: ['이온주입 도즈', 'Focus-Dose Matrix', 'PR 프로파일', 'CD 산포'],
+      chunks: [
+        { file: '반도체Process/2026-07-09-Dose.md', excerpt: '도즈는 단위 면적당 조사량을 의미하며, 노광 도즈와 이온주입 도즈로 구분하여 정리...' },
+        { file: '반도체Process/2026-07-09-Dose.md · #2', excerpt: '이온주입 공정에서의 도즈는 불순물 농도를 결정하는 핵심 파라미터...' },
+        { file: '소자/2026-07-01-CD균일도.md', excerpt: '도즈 편차 1% 변화가 CD에 미치는 영향을 시뮬레이션 데이터로 정리...' },
+        { file: '생산관리/2026-07-07-공정관리.md', excerpt: 'SPC 관리도를 통해 도즈 변동을 실시간 모니터링하는 방법을 정리...' }
+      ]
+    }
+  ];
+
+  const PIPELINE_STEPS = ['마크다운 노트 로드', '청크 분할 (chunk=500)', 'Gemini 임베딩', 'Chroma 벡터DB 검색 (k=4)', 'Gemini 2.5 Flash 응답 생성'];
+
+  const el = id => document.getElementById(id);
+  const messagesEl = el('hpc-messages');
+  const chipsEl = el('hpc-chips');
+  const chunksEl = el('hpc-chunks');
+  const pipelineEl = el('hpc-pipeline');
+  const statusEl = el('hpc-status');
+  const inputEl = el('hpc-input');
+  const sendBtn = el('hpc-send');
+
+  PIPELINE_STEPS.forEach((step, i) => {
+    const row = document.createElement('div');
+    row.className = 'hpc-pipeline-step';
+    row.innerHTML = `
+      <div class="hpc-pipeline-dot-col">
+        <span class="hpc-pipeline-dot"></span>
+        ${i < PIPELINE_STEPS.length - 1 ? '<span class="hpc-pipeline-line"></span>' : ''}
+      </div>
+      <div class="hpc-pipeline-text">${step}</div>
+    `;
+    pipelineEl.appendChild(row);
+  });
+
+  function matchPreset(q) {
+    const lower = q.toLowerCase();
+    return PRESETS.find(p => p.triggers.some(t => lower.includes(t)));
+  }
+
+  function addIntro() {
+    messagesEl.innerHTML = '<div class="hpc-msg-intro">안녕하세요! 저는 하이포_챗이에요. 제가 정리한 학습 노트에 근거해서만 답변해요. 아래 예시 질문을 눌러보거나 직접 물어보세요.</div>';
+  }
+
+  function renderChips() {
+    chipsEl.innerHTML = '';
+    PRESETS.forEach(p => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'hpc-chip';
+      chip.textContent = p.label;
+      chip.addEventListener('click', () => sendMessage(p.label));
+      chipsEl.appendChild(chip);
+    });
+  }
+
+  function addUserMessage(text) {
+    const div = document.createElement('div');
+    div.className = 'hpc-msg-user';
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addTyping() {
+    const div = document.createElement('div');
+    div.className = 'hpc-typing';
+    div.id = 'hpc-typing-indicator';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addBotMessage(preset) {
+    const div = document.createElement('div');
+    div.className = 'hpc-msg-bot';
+    div.innerHTML = `
+      <div class="hpc-greeting">${preset.greeting}</div>
+      ${preset.sections.map((s, i) => `
+        <div class="hpc-sec">
+          <div class="hpc-sec-head">
+            <span class="hpc-sec-num">${i + 1}</span>
+            <span class="hpc-sec-title">${s.title}</span>
+          </div>
+          <div class="hpc-sec-body">${s.body}</div>
+        </div>
+      `).join('')}
+      <div class="hpc-kw-row">${preset.keywords.map(k => `<span class="hpc-kw-pill">${k}</span>`).join('')}</div>
+    `;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addNotFound() {
+    const div = document.createElement('div');
+    div.className = 'hpc-msg-bot';
+    div.innerHTML = '음, 아직 제 노트 중에 이 질문과 관련된 내용을 찾지 못했어요. 아래 예시 질문으로 한번 물어봐 주시겠어요?';
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function renderChunks(preset) {
+    if (!preset) {
+      chunksEl.innerHTML = '<div class="hpc-chunks-empty">질문을 입력하면 벡터 DB에서 검색된 노트 청크 4개가 여기 표시됩니다.</div>';
+      return;
+    }
+    chunksEl.innerHTML = preset.chunks.map(c => `
+      <div class="hpc-chunk">
+        <div class="hpc-chunk-file">${c.file}</div>
+        <div class="hpc-chunk-excerpt">${c.excerpt}</div>
+      </div>
+    `).join('');
+  }
+
+  let isTyping = false;
+  function sendMessage(text) {
+    const q = (text !== undefined ? text : inputEl.value).trim();
+    if (!q || isTyping) return;
+    addUserMessage(q);
+    inputEl.value = '';
+    isTyping = true;
+    statusEl.textContent = '답변 작성 중...';
+    sendBtn.disabled = true;
+    addTyping();
+    setTimeout(() => {
+      const indicator = el('hpc-typing-indicator');
+      if (indicator) indicator.remove();
+      const preset = matchPreset(q);
+      if (preset) {
+        addBotMessage(preset);
+        renderChunks(preset);
+      } else {
+        addNotFound();
+      }
+      isTyping = false;
+      statusEl.textContent = '노트 기반 답변 준비 완료';
+      sendBtn.disabled = false;
+    }, 850);
+  }
+
+  function reset() {
+    addIntro();
+    renderChunks(null);
+    inputEl.value = '';
+  }
+
+  sendBtn.addEventListener('click', () => sendMessage());
+  inputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+  });
+  el('hpc-reset').addEventListener('click', reset);
+
+  addIntro();
+  renderChips();
+  renderChunks(null);
+})();
+</script>
 </body>
 </html>
