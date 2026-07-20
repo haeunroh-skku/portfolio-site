@@ -381,12 +381,19 @@ section .btn-ghost:hover { border-color: var(--accent-dark); color: var(--accent
   background: var(--bg-alt);
 }
 .card-title {
-  padding: 16px 18px;
+  padding: 16px 18px 4px;
   font-size: 12.5px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-align: center;
   color: var(--text-dim);
+  margin: 0;
+}
+.card-caption {
+  padding: 0 18px 16px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--text-faint);
   margin: 0;
 }
 
