@@ -275,45 +275,6 @@ section .btn-ghost:hover { border-color: var(--accent-dark); color: var(--accent
 .resume-item.ghost::before { background: var(--border); border-color: var(--bg-alt); }
 .resume-item.ghost p { font-family: var(--mono); font-size: 13px; margin: 0; }
 
-.cert-block {
-  max-width: 640px;
-  margin: 56px auto 0;
-  padding-top: 40px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.cert-block h3 {
-  font-size: 15px;
-  color: var(--accent-dark);
-  margin-bottom: 20px;
-}
-.cert-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-.cert-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 9px 18px;
-  border-radius: 100px;
-}
-.cert-pill::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-}
-
 /* ==========================================================================
    Projects / Portfolio
    ========================================================================== */
