@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMOS 공정설계 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css?v=28">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="hypo-index.html" class="back-link">← Hy-Po 프로젝트 목록으로</a>
+      <div class="eyebrow">Research · SK하이닉스 청년 Hy-Po</div>
+      <h1>CMOS 공정설계</h1>
+      <p class="detail-subtitle">Contact(W-Plug)~M1(Cu Damascene) 통합 단면 구조 완성</p>
+      <p style="max-width:640px;">
+        CMOS 소자의 Contact부터 Metal 1 배선까지 후공정 설계를 다룬 프로젝트로, W-Plug
+        (Contact) 9단계와 Cu Damascene(M1) 8단계 Process Flow를 설계해, STI부터 M1까지
+        이어지는 최종 CMOS 단면 구조를 완성했습니다.
+      </p>
+      <div class="detail-meta">
+        <div><span>기간</span><span>2026.07 (SK하이닉스 청년 Hy-Po 팀 프로젝트)</span></div>
+        <div><span>구분</span><span>팀 프로젝트 · A-1조 7인</span></div>
+      </div>
+      <div class="detail-stats">
+        <div><span>9단계</span><span>W-Plug Process Flow</span></div>
+        <div><span>8단계</span><span>Cu Damascene Process Flow</span></div>
+        <div><span>7개 모듈</span><span>STI~Cu Damascene 통합 CMOS 단면</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap" style="display:contents;">
+      <nav class="toc">
+        <a href="#overview">개요</a>
+        <a href="#wplug">W-Plug 공정설계</a>
+        <a href="#tradeoff">W vs Cu 재료 선택</a>
+        <a href="#damascene">Cu Damascene 공정</a>
+        <a href="#result">최종 단면 구조</a>
+        <a href="#learning">배운 점</a>
+      </nav>
+
+      <div class="detail-content">
+
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            소자(Gate, Source/Drain)와 최상위 배선(Metal1) 사이를 전기적으로 연결하는 후공정
+            설계 과제입니다. 절연막을 관통해 소자와 배선을 잇는 Contact(W-Plug) 공정과, Metal1
+            이상 배선을 형성하는 Cu Damascene 공정을 각각 설계하고, 두 공정을 하나의 CMOS 단면
+            구조로 통합했습니다.
+          </p>
+        </section>
+
+        <section id="wplug">
+          <h2>W-Plug 공정설계</h2>
+          <p>
+            목적은 트랜지스터(Gate, S/D)와 ILD(층간 절연막) 위의 배선층(Metal1)을 전기적으로
+            연결하는 저저항 Contact을 형성하는 것입니다. 소자와 배선 사이 절연막을 관통하는
+            수직 통로를 만들고, 그 통로를 금속으로 채워 신호와 전원이 오갈 수 있게 합니다.
+          </p>
+          <table class="data-table">
+            <tr><th>#</th><th>Process</th><th>Description</th></tr>
+            <tr><td>1</td><td>ILD Deposition</td><td>PECVD로 SiO2 층간절연막 증착, 트랜지스터 전체를 덮음</td></tr>
+            <tr><td>2</td><td>CMP</td><td>표면 평탄화 (후속 포토 공정의 초점 확보 목적)</td></tr>
+            <tr><td>3</td><td>CA Photo</td><td>Contact 마스크(CA)로 노광, 구멍 뚫을 위치만 오픈</td></tr>
+            <tr><td>4</td><td>Contact Hole Etch (D/E)</td><td>절연막을 세로로 깊게 식각하여 Salicide 표면까지 관통</td></tr>
+            <tr><td>5</td><td>PR Strip</td><td>감광액 제거</td></tr>
+            <tr><td>6</td><td>Ti/TiN Barrier 증착</td><td>Sputtering — 접착력 확보 및 W의 Si 확산 방지</td></tr>
+            <tr><td>7</td><td>W CVD</td><td>텅스텐으로 Contact Hole을 완전히 채움</td></tr>
+            <tr><td>8</td><td>W CMP</td><td>홀 밖으로 삐져나온 W 제거, 표면 재평탄화</td></tr>
+            <tr><td>9</td><td>Cleaning</td><td>후속 공정(Cu Damascene)을 위한 세정</td></tr>
+          </table>
+          <div class="figure">
+            <img src="../assets/images/hypo1-wplug-flow.png" alt="W-Plug Process Flow 9단계">
+            <div class="figure-caption">W-Plug Process Flow — 절연막 증착부터 Cleaning까지 9단계</div>
+          </div>
+        </section>
+
+        <section id="tradeoff">
+          <h2>W vs Cu 재료 선택 근거</h2>
+          <p>
+            Contact처럼 High Aspect Ratio Hole을 채우는 구간은 W, Metal1 이상 배선처럼 저항
+            손실이 중요한 구간은 Cu를 쓰는 이유를 재료 물성으로 비교했습니다.
+          </p>
+          <table class="data-table">
+            <tr><th></th><th>W (Contact, W-Plug)</th><th>Cu (M1 이상, Damascene)</th></tr>
+            <tr><td>비저항</td><td>≈ 5.6 μΩ·cm (Cu 대비 약 3.3배)</td><td class="highlight">≈ 1.7 μΩ·cm — 낮아 배선 저항 손실 최소화</td></tr>
+            <tr><td>Step Coverage</td><td class="highlight">CVD로 High Aspect Ratio Hole도 Void 없이 완전히 채움</td><td>Damascene 방식으로 홈에 전기도금 채움</td></tr>
+            <tr><td>소자 오염 위험</td><td class="highlight">Si 확산이 적어 오염 위험 낮음</td><td>Si로 확산되어 소자를 오염시킬 수 있어 Barrier 필수</td></tr>
+            <tr><td>내열성</td><td class="highlight">우수 — 후속 열공정에 안정적</td><td>상대적으로 열적 안정성 낮음</td></tr>
+          </table>
+          <p>
+            즉 Contact 영역은 좁고 깊은 Hole을 Void 없이 채우는 W의 Step Coverage와 내열성이,
+            Metal1 이상 배선은 배선 전체 저항 손실을 줄이는 Cu의 낮은 비저항이 유리해 공정
+            단계별로 다른 재료를 채택하는 것이 CMOS 후공정의 표준적인 접근입니다.
+          </p>
+        </section>
+
+        <section id="damascene">
+          <h2>Cu Damascene 공정</h2>
+          <p>
+            절연막을 먼저 배선 형상으로 식각한 뒤 그 홈 내부에 Cu를 채우고 CMP로 표면의 불필요한
+            금속을 제거해 배선을 형성하는 공정으로, NMOS·PMOS의 Gate/S/D에서 올라온 W Plug를
+            Metal1 배선으로 연결해 CMOS 회로를 완성합니다. 배선 저항이 낮고 RC Delay가 적으며
+            EM 특성이 우수하다는 장점이 있는 반면, 공정이 복잡하고 Cu 확산 문제·식각 난이도·CMP
+            불량 위험이 있다는 점도 함께 정리했습니다.
+          </p>
+          <table class="data-table">
+            <tr><th>#</th><th>Process</th><th>Description</th></tr>
+            <tr><td>1</td><td>IMD Deposition</td><td>Cu 배선끼리 전기적으로 분리하는 층간 절연막 증착</td></tr>
+            <tr><td>2</td><td>Trench Photo</td><td>배선 모양 마스크로 노광·현상</td></tr>
+            <tr><td>3</td><td>Trench Etch</td><td>PR을 식각 마스크로 SiO2 절연막을 식각해 배선 홈 형성</td></tr>
+            <tr><td>4</td><td>PR Strip</td><td>남은 PR 제거</td></tr>
+            <tr><td>5</td><td>Ta/TaN Barrier</td><td>Cu의 SiO2·Si 확산 방지 및 접착력 향상</td></tr>
+            <tr><td>6</td><td>Cu Seed Sputtering</td><td>전해도금 전류 경로 제공을 위한 얇은 Seed층 증착</td></tr>
+            <tr><td>7</td><td>Cu Electroplating</td><td>Trench 내부를 Cu로 채움</td></tr>
+            <tr><td>8</td><td>Cu CMP</td><td>Overburden Cu·Barrier 제거, 표면 재평탄화</td></tr>
+          </table>
+          <div class="figure">
+            <img src="../assets/images/hypo1-cudamascene-flow.png" alt="Cu Damascene Process Flow 8단계">
+            <div class="figure-caption">Cu Damascene Process Flow — IMD 증착부터 Cu CMP까지 8단계</div>
+          </div>
+        </section>
+
+        <section id="result">
+          <h2>최종 단면 구조</h2>
+          <p>
+            W-Plug와 Cu Damascene 두 공정을 결합해 STI → Twin Well → Poly-Si Gate → LDD &amp;
+            S/D → Ni Salicide → W Plug(Contact) → Cu Damascene(M1)까지 이어지는 CMOS 최종
+            단면도를 완성했습니다.
+          </p>
+          <div class="figure">
+            <img src="../assets/images/hypo1-final-cross-section.svg" alt="CMOS 최종 단면도">
+            <div class="figure-caption">CMOS Final Cross-Section — NMOS/PMOS, STI, W Plug, Cu M1 통합 구조</div>
+          </div>
+          <div class="figure">
+            <img src="../assets/images/hypo1-cmos-layout.png" alt="CMOS 레이아웃">
+            <div class="figure-caption">CMOS 레이아웃 — Contact(CA)와 M1 배선 배치</div>
+          </div>
+        </section>
+
+        <section id="learning">
+          <h2>배운 점</h2>
+          <ul class="bullets">
+            <li>같은 "배선"이라도 Contact와 상위 Metal 배선은 요구되는 물성(Step Coverage, 비저항, 내열성)이 달라 재료 선택 기준 자체가 다르다는 것을 재료 물성 수치로 직접 비교하며 이해했습니다</li>
+            <li>단위 공정 하나하나(ILD 증착, CMP, Photo, Etch)가 앞뒤 공정과 어떻게 맞물리는지 9단계·8단계 Flow를 직접 설계해보며, 공정 순서 하나가 바뀌면 전체 구조가 어떻게 달라지는지 체감할 수 있었습니다</li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="detail-nav">
+      <a href="hypo5-wafer-crack.html">← 이전 프로젝트: Micro-crack·Internal Crack 원인분석</a>
+      <a href="hypo-index.html">Hy-Po 프로젝트 목록으로 →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/haeunroh" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=4"></script>
+</body>
+</html>

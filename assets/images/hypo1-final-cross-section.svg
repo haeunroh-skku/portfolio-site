@@ -1,0 +1,141 @@
+<svg viewBox="0 0 1000 620" width="1000" height="620" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect x="0" y="0" width="1000" height="620" fill="#ffffff"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">CMOS Final Cross-Section (along A–B)</text>
+
+  <!-- P-Wafer substrate -->
+  <rect x="20" y="420" width="920" height="90" fill="#c9c7c0" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="480" y="472" text-anchor="middle" font-size="15" fill="#1a1a1a">P-Wafer (P-type Si Substrate)</text>
+
+  <!-- Wells -->
+  <rect x="20" y="360" width="460" height="60" fill="#f7c6d9" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="250" y="395" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">P-Well</text>
+  <rect x="480" y="360" width="500" height="60" fill="#bfe0f5" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="730" y="395" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">N-Well</text>
+
+  <!-- STI trenches (active-area separators) -->
+  <g fill="#a9c8e0" stroke="#1a1a1a" stroke-width="1.5">
+    <rect x="140" y="330" width="45" height="30"/>
+    <rect x="455" y="330" width="45" height="30"/>
+    <rect x="775" y="330" width="45" height="30"/>
+  </g>
+  <text x="162" y="349" text-anchor="middle" font-size="10" fill="#1a1a1a">STI</text>
+  <text x="477" y="349" text-anchor="middle" font-size="10" fill="#1a1a1a">STI</text>
+  <text x="797" y="349" text-anchor="middle" font-size="10" fill="#1a1a1a">STI</text>
+
+  <!-- Active (RX) regions: yellow -->
+  <g fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5">
+    <rect x="20" y="330" width="120" height="30"/>   <!-- P+ well tap -->
+    <rect x="185" y="330" width="270" height="30"/>  <!-- NMOS active -->
+    <rect x="500" y="330" width="275" height="30"/>  <!-- PMOS active -->
+    <rect x="820" y="330" width="120" height="30"/>  <!-- N+ well tap -->
+  </g>
+
+  <!-- Well tap contacts -->
+  <rect x="55" y="300" width="50" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="80" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">p+</text>
+
+  <rect x="855" y="300" width="50" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="880" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">n+</text>
+
+  <!-- NMOS S/D + LDD + Gate stack -->
+  <rect x="195" y="300" width="45" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="217" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">n+</text>
+  <rect x="240" y="310" width="25" height="20" fill="#f7e9a0" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="252" y="325" text-anchor="middle" font-size="8" fill="#1a1a1a">n-LDD</text>
+  <rect x="400" y="310" width="25" height="20" fill="#f7e9a0" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="412" y="325" text-anchor="middle" font-size="8" fill="#1a1a1a">n-LDD</text>
+
+  <rect x="400" y="300" width="45" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="422" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">n+</text>
+
+  <!-- NMOS Gate stack -->
+  <rect x="265" y="296" width="135" height="6" fill="#a9c8e0" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="332" y="292" text-anchor="middle" font-size="9" fill="#767570">Gate Oxide</text>
+  <rect x="265" y="264" width="20" height="32" fill="#e8e8e6" stroke="#1a1a1a" stroke-width="1"/>
+  <rect x="380" y="264" width="20" height="32" fill="#e8e8e6" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="332" y="278" text-anchor="middle" font-size="8" fill="#767570">Spacer</text>
+  <rect x="285" y="256" width="95" height="40" fill="#e05a5a" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="332" y="280" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">Poly-Si Gate</text>
+
+  <!-- NiSi caps NMOS -->
+  <rect x="195" y="294" width="45" height="6" fill="#3a3a3a"/>
+  <rect x="400" y="294" width="45" height="6" fill="#3a3a3a"/>
+  <rect x="285" y="250" width="95" height="6" fill="#3a3a3a"/>
+
+  <!-- PMOS S/D + LDD + Gate stack (mirror) -->
+  <rect x="510" y="300" width="45" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="532" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">p+</text>
+  <rect x="555" y="310" width="25" height="20" fill="#fbdce8" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="567" y="325" text-anchor="middle" font-size="8" fill="#1a1a1a">p-LDD</text>
+  <rect x="710" y="310" width="25" height="20" fill="#fbdce8" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="722" y="325" text-anchor="middle" font-size="8" fill="#1a1a1a">p-LDD</text>
+  <rect x="735" y="300" width="45" height="30" fill="#f5d76e" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="757" y="320" text-anchor="middle" font-size="12" fill="#1a1a1a">p+</text>
+
+  <rect x="580" y="296" width="135" height="6" fill="#a9c8e0" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="647" y="292" text-anchor="middle" font-size="9" fill="#767570">Gate Oxide</text>
+  <rect x="580" y="264" width="20" height="32" fill="#e8e8e6" stroke="#1a1a1a" stroke-width="1"/>
+  <rect x="695" y="264" width="20" height="32" fill="#e8e8e6" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="647" y="278" text-anchor="middle" font-size="8" fill="#767570">Spacer</text>
+  <rect x="600" y="256" width="95" height="40" fill="#e05a5a" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="647" y="280" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="700">Poly-Si Gate</text>
+
+  <rect x="510" y="294" width="45" height="6" fill="#3a3a3a"/>
+  <rect x="735" y="294" width="45" height="6" fill="#3a3a3a"/>
+  <rect x="600" y="250" width="95" height="6" fill="#3a3a3a"/>
+
+  <!-- ILD0 -->
+  <rect x="20" y="150" width="920" height="100" fill="#dceaf5" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="60" y="145" font-size="12" fill="#767570">ILD0</text>
+
+  <!-- W Plug (CA) contacts rising through ILD0 -->
+  <g fill="#2b3a6b" stroke="#1a1a1a" stroke-width="1">
+    <rect x="65" y="160" width="30" height="140"/>
+    <rect x="205" y="160" width="25" height="140"/>
+    <rect x="410" y="160" width="25" height="140"/>
+    <rect x="520" y="160" width="25" height="140"/>
+    <rect x="745" y="160" width="25" height="140"/>
+    <rect x="865" y="160" width="30" height="140"/>
+  </g>
+  <text x="500" y="205" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff" style="paint-order:stroke" stroke="#2b3a6b" stroke-width="6">W Plug (CA)</text>
+
+  <!-- ILD1 -->
+  <rect x="20" y="70" width="920" height="80" fill="#dceaf5" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="60" y="65" font-size="12" fill="#767570">ILD1</text>
+
+  <!-- Cu M1 traces -->
+  <g fill="#7c5cbf" stroke="#1a1a1a" stroke-width="1">
+    <rect x="55" y="95" width="70" height="24"/>
+    <rect x="195" y="95" width="255" height="24"/>
+    <rect x="510" y="95" width="255" height="24"/>
+    <rect x="855" y="95" width="70" height="24"/>
+  </g>
+  <text x="322" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Cu M1 (Damascene)</text>
+
+  <!-- SiN Cap Layer -->
+  <rect x="20" y="55" width="920" height="15" fill="#5fc9c9" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="500" y="66" text-anchor="middle" font-size="10" fill="#1a1a1a">SiN Cap Layer</text>
+
+  <!-- A-B section markers -->
+  <text x="20" y="600" font-size="16" font-weight="700" fill="#1a1a1a">A</text>
+  <text x="965" y="600" font-size="16" font-weight="700" fill="#1a1a1a">B</text>
+
+  <!-- NMOS / PMOS labels -->
+  <text x="322" y="580" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">NMOS</text>
+  <text x="647" y="580" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">PMOS</text>
+
+  <!-- Legend -->
+  <g font-size="11" fill="#1a1a1a">
+    <rect x="20" y="530" width="16" height="12" fill="#f5d76e" stroke="#1a1a1a"/><text x="40" y="540">RX (Active)</text>
+    <rect x="130" y="530" width="16" height="12" fill="#f7c6d9" stroke="#1a1a1a"/><text x="150" y="540">P-Well</text>
+    <rect x="220" y="530" width="16" height="12" fill="#bfe0f5" stroke="#1a1a1a"/><text x="240" y="540">N-Well</text>
+    <rect x="310" y="530" width="16" height="12" fill="#e05a5a" stroke="#1a1a1a"/><text x="330" y="540">PC (Gate)</text>
+    <rect x="410" y="530" width="16" height="12" fill="#2b3a6b" stroke="#1a1a1a"/><text x="430" y="540">CA (Contact)</text>
+    <rect x="530" y="530" width="16" height="12" fill="#7c5cbf" stroke="#1a1a1a"/><text x="550" y="540">M1</text>
+    <rect x="600" y="530" width="16" height="12" fill="#c9c7c0" stroke="#1a1a1a"/><text x="620" y="540">기판</text>
+    <rect x="670" y="530" width="16" height="12" fill="#dceaf5" stroke="#1a1a1a"/><text x="690" y="540">ILD·SiO2</text>
+    <rect x="770" y="530" width="16" height="12" fill="#5fc9c9" stroke="#1a1a1a"/><text x="790" y="540">SiN</text>
+    <rect x="830" y="530" width="16" height="12" fill="#3a3a3a" stroke="#1a1a1a"/><text x="850" y="540">NiSi/W</text>
+  </g>
+</svg>

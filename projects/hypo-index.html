@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK하이닉스 청년 Hy-Po 팀 프로젝트 — Haeun Roh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../css/style.css?v=28">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand-logo">Haeun Roh</a>
+    <div class="header-info">
+      <div class="header-subtitle">SEMICONDUCTOR YIELD / PROCESS DATA ANALYST</div>
+      <nav class="nav-links">
+        <a href="../index.html">ABOUT</a>
+        <a href="../projects.html">PROJECT</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero">
+    <div class="wrap">
+      <a href="../projects.html" class="back-link">← 프로젝트 목록으로</a>
+      <div class="eyebrow">Research · SK하이닉스 청년 Hy-Po</div>
+      <h1>SK하이닉스 청년 Hy-Po 팀 프로젝트 (6건)</h1>
+      <p style="max-width:640px;">
+        SK하이닉스 청년 Hy-Po 프로그램(10주·360시간)에서 A-1조 7인 팀으로 진행한 반도체 불량
+        원인분석·공정최적화 프로젝트 6건 중 5건입니다(나머지 1건은 자료 정리 중). 8D Report·4M·5-Why·DOE·ANOVA 등 실무 방법론을
+        적용해 DRAM 소자 신뢰성부터 Etch·Doping 공정, 후공정 Dicing, CMOS 소자 설계까지
+        다뤘습니다. 팀 프로젝트 우수상을 수상했습니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="wrap">
+      <div class="project-grid" style="margin-top:8px;">
+
+        <a href="hypo2-dram-retention.html" class="card featured" data-category="research">
+          <div class="card-thumb"><img src="../assets/images/hypo2-wafermap-failbit-clean.png" alt="정상 Lot과 이상 Lot의 Wafer Map Fail Bit 분포 비교" loading="lazy"></div>
+          <h3 class="card-title">DRAM Data Retention 불량 개선</h3>
+          <p class="card-caption">Fail Bit Rate 350ppm(관리기준 3.5배)의 근본원인을 GIDL로 규명</p>
+        </a>
+
+        <a href="hypo3-etch-profile.html" class="card featured" data-category="research">
+          <div class="card-thumb"><img src="../assets/images/hypo3-sim-optimal.png" alt="Etch Profile 결함 최소조건 시뮬레이션" loading="lazy"></div>
+          <h3 class="card-title">Etch Profile 이상 원인분석</h3>
+          <p class="card-caption">DOE로 Undercut 87%·Micro-trench 95% 저감</p>
+        </a>
+
+        <a href="hypo4-doping-bow.html" class="card featured" data-category="research">
+          <div class="card-thumb"><img src="../assets/images/hypo4-bow-map-comparison.png" alt="최적화 전후 3D Bow Map 비교" loading="lazy"></div>
+          <h3 class="card-title">Doping Process Wafer Bow 불량 개선</h3>
+          <p class="card-caption">DOE로 Bow 50μm→12μm 저감</p>
+        </a>
+
+        <a href="hypo5-wafer-crack.html" class="card" data-category="research">
+          <div class="card-thumb"><img src="../assets/images/hypo5-sem-crack.png" alt="SEM 기반 Crack 관찰 이미지" loading="lazy"></div>
+          <h3 class="card-title">Micro-crack·Internal Crack 원인분석</h3>
+          <p class="card-caption">냉각 조건 최적화로 열응력 450→80MPa 저감</p>
+        </a>
+
+        <a href="hypo1-cmos-design.html" class="card" data-category="research">
+          <div class="card-thumb"><img src="../assets/images/hypo1-final-cross-section.svg" alt="CMOS 최종 단면도" loading="lazy"></div>
+          <h3 class="card-title">CMOS 공정설계</h3>
+          <p class="card-caption">Contact(W-Plug)~M1(Cu Damascene) 통합 단면 구조 완성</p>
+        </a>
+
+        <div class="card card-ghost">
+          <div class="plus">+</div>
+          <p>프로젝트 6건 중 1건은 정리 중입니다</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-wordmark">Haeun Roh</div>
+    <div class="footer-social">
+      <a href="https://github.com/haeunroh-skku" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/haeunroh" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:rohoonae@gmail.com">Email</a>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> Haeun Roh. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="../js/main.js?v=4"></script>
+</body>
+</html>
