@@ -40,10 +40,10 @@
         <div><span>기간</span><span>2025.11</span></div>
         <div><span>역할</span><span>개인 프로젝트</span></div>
         <div><span>스택</span><span>Python, Pandas, Random Forest</span></div>
-        <div><span>데이터</span><span>Kaggle SECOM (1,500개 이상 변수)</span></div>
+        <div><span>데이터</span><span>Kaggle SECOM (590개 변수)</span></div>
       </div>
       <div class="detail-stats">
-        <div><span>1,500+</span><span>분석한 Process 변수</span></div>
+        <div><span>590개</span><span>분석한 Process 변수</span></div>
         <div><span>Top 5</span><span>도출한 핵심 불량 변수</span></div>
         <div><span>GitHub</span><span>코드·방법론 공개</span></div>
       </div>
@@ -79,8 +79,8 @@
         <section id="problem">
           <h2>문제 정의</h2>
           <ul class="bullets">
-            <li>1,500개 이상의 Process 변수 중 수율(Pass/Fail)에 실질적인 영향을 주는 변수를 특정해야 했음</li>
-            <li>변수 다수에 결측치가 포함되어 있어 그대로 분석에 사용할 수 없었음</li>
+            <li>590개의 Process 변수 중 수율(Pass/Fail)에 실질적인 영향을 주는 변수를 특정해야 했음</li>
+            <li>591개 변수 중 538개 변수에 결측치가 포함되어 있어 그대로 분석에 사용할 수 없었음</li>
             <li>단순 상관관계만으로는 다변량 Process 데이터에서 핵심 원인을 짚어내기 어려웠음</li>
           </ul>
         </section>
@@ -89,8 +89,8 @@
           <h2>접근 방법</h2>
           <p><strong>전처리</strong></p>
           <ul class="bullets">
-            <li>Pandas를 활용해 1,500개 이상의 변수 중 결측치가 다수 포함된 변수를 선별적으로 제거</li>
-            <li>남은 변수의 결측치는 평균값으로 대체하는 등 데이터 정제 수행</li>
+            <li>Pandas를 활용해 결측치 비율 20%를 초과하는 32개 변수를 제거(591개 → 559개)</li>
+            <li>남은 559개 변수의 결측치는 각 변수의 평균값으로 대체(fillna) — 결측 비율이 높은 변수는 이미 제거한 뒤라 남은 변수들의 결측 비율이 낮아, 평균 대체로 분포를 크게 왜곡하지 않으면서 전체 1,567개 행을 그대로 유지할 수 있었음</li>
           </ul>
           <p style="margin-top:20px;"><strong>분석</strong></p>
           <ul class="bullets">
@@ -106,9 +106,9 @@
         <section id="result">
           <h2>결과 및 기여</h2>
           <p>
-            분석 결과, <strong>특정 'Sensor' 값이 모델의 불량 판별에서 가장 높은 중요도</strong>를
-            보임을 확인했습니다. 이를 바탕으로 해당 Process 변수를 우선 모니터링 대상으로
-            제안했습니다.
+            분석 결과, <strong>변수 59가 Importance 0.0225로 가장 높은 중요도</strong>를 보여
+            2위 변수(103, 0.0131)보다 뚜렷하게 앞섰습니다. 이를 바탕으로 변수 59를 우선
+            모니터링 대상으로 제안했습니다.
           </p>
           <div class="callout">
             <strong>증빙:</strong> 전체 분석 코드와 방법론은 GitHub에 문서화했습니다.
