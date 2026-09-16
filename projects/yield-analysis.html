@@ -90,7 +90,7 @@
           <p><strong>전처리</strong></p>
           <ul class="bullets">
             <li>Pandas를 활용해 결측치 비율 20%를 초과하는 32개 변수를 제거(591개 → 559개)</li>
-            <li>남은 559개 변수의 결측치는 각 변수의 평균값으로 대체(fillna) — 결측 비율이 높은 변수는 이미 제거한 뒤라 남은 변수들의 결측 비율이 낮아, 평균 대체로 분포를 크게 왜곡하지 않으면서 전체 1,567개 행을 그대로 유지할 수 있었음</li>
+            <li>남은 559개 변수의 결측치는 각 변수의 평균값으로 대체(fillna) — 제거된 32개 변수는 결측 비율 평균 66%(45~91% 범위)인 반면 남은 변수들은 결측이 있어도 평균 1.1%(최대 17.4%)로 두 그룹 사이 격차가 뚜렷해 20% 기준이 자연스러운 경계선이었고, 평균 대체로 분포를 크게 왜곡하지 않으면서 전체 1,567개 행을 그대로 유지할 수 있었음</li>
           </ul>
           <p style="margin-top:20px;"><strong>분석</strong></p>
           <ul class="bullets">
@@ -101,6 +101,11 @@
             <img src="../assets/images/secom-feature-importance.png" alt="Feature Importance Top 5 차트">
             <div class="figure-caption">Random Forest 기반 Process 변수 Feature Importance Top 5 (변수 ID: 59, 103, 348, 130, 33)</div>
           </div>
+          <p style="margin-top:12px; font-size:13.5px; color:var(--text-dim);">
+            참고 : Feature Importance 수치 0.0225는 전체 변수 개수 대비 상대적으로 보면, 균등
+            분배 시 평균(1/558≈0.0018)의 약 12.5배로 변수 규모를 고려하면 뚜렷한 신호로 해석
+            가능하다고 한다.
+          </p>
         </section>
 
         <section id="result">
@@ -127,7 +132,7 @@
         <section id="learning">
           <h2>배운 점 & 향후 계획</h2>
           <ul class="bullets">
-            <li>결측치를 처리하고, 머신러닝 모델로 핵심 불량 원인을 특정하며, Process 개선점을 도출하는 엔지니어의 문제 해결 전 과정을 경험함</li>
+            <li>결측치를 처리하고, 머신러닝 모델로 핵심 불량 원인을 특정하며, Process 개선점을 도출하는 엔지니어의 기본적인 문제 해결 전 과정을 경험함</li>
             <li>단일 변수 상관관계가 아닌 모델 기반 변수 중요도로 접근해야 다변량 Process 데이터의 원인을 더 신뢰성 있게 짚어낼 수 있음을 체득</li>
             <li>다음에는 XGBoost·LightGBM 등 다른 분류 모델과 성능을 비교하고, 도출한 핵심 변수를 실제 Process 관리도(SPC)와 연동해 실시간 이상 탐지로 확장해보고 싶습니다</li>
           </ul>
